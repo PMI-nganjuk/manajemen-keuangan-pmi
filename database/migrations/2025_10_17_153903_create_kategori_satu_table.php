@@ -12,8 +12,6 @@ return new class extends Migration
             Schema::create('kategori_satu', function (Blueprint $table) {
                 $table->id('id_kategori1');
                 $table->string('nama_kategori');
-                $table->unsignedBigInteger('id_coa');
-                $table->foreign('id_coa')->references('id_coa')->on('coa')->onDelete('cascade');
                 $table->timestamps();
             });
         }

@@ -13,8 +13,20 @@ return new class extends Migration
                 $table->id('id_kategori2');
                 $table->string('nama_kategori');
                 $table->unsignedBigInteger('id_kategori1');
-                $table->foreign('id_kategori1')->references('id_kategori1')->on('kategori_satu')->onDelete('cascade');
+                $table->unsignedBigInteger('id_coa');
                 $table->timestamps();
+
+                // Relasi kategori satu
+                $table->foreign('id_kategori1')
+                    ->references('id_kategori1')
+                    ->on('kategori_satu')
+                    ->onDelete('cascade');
+
+                // Relasi COA
+                $table->foreign('id_coa')
+                    ->references('id_coa')
+                    ->on('coa')
+                    ->onDelete('cascade');
             });
         }
     }

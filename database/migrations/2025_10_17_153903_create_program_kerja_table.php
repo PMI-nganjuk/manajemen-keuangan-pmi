@@ -14,7 +14,13 @@ return new class extends Migration
                 $table->string('nama_program');
                 $table->string('keterangan')->nullable();
                 $table->unsignedBigInteger('id_pegawai')->nullable();
-                $table->foreign('id_pegawai')->references('id_user')->on('users')->onDelete('set null');
+
+                // relasi ke users (id_user)
+                $table->foreign('id_pegawai')
+                    ->references('id_user')
+                    ->on('users')
+                    ->onDelete('set null');
+
                 $table->timestamps();
             });
         }

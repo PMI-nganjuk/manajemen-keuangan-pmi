@@ -19,6 +19,12 @@ return new class extends Migration
         }
     }
 
+    public function penyesuaian()
+    {
+        return $this->hasMany(Penyesuaian::class, 'id_coa', 'id_coa');
+    }
+
+
     public function down(): void
     {
         Schema::dropIfExists('coa');
