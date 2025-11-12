@@ -7,6 +7,7 @@ use App\Http\Controllers\PenerimaanKasController;
 use App\Http\Controllers\KategoriSatuController;
 use App\Http\Controllers\KategoriDuaController;
 use App\Http\Controllers\ProgramKerjaController;
+use App\Http\Controllers\ProfilPmiController;
 
 
 
@@ -89,3 +90,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/program-kerja/{id}', [ProgramKerjaController::class, 'update']);
     Route::delete('/program-kerja/{id}', [ProgramKerjaController::class, 'destroy']);
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profil-pmi', [ProfilPmiController::class, 'index'])->name('profil_pmi.index');
+    Route::get('/profil-pmi/edit', [ProfilPmiController::class, 'edit'])->name('profil_pmi.edit');
+    Route::post('/profil-pmi/update', [ProfilPmiController::class, 'update'])->name('profil_pmi.update');
+});
+
