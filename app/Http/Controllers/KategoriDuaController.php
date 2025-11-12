@@ -3,63 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\KategoriDua;
+use App\Models\KategoriSatu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KategoriDuaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $kategoriDua = KategoriDua::with('kategoriSatu')->get();
+        return response()->json($kategoriDua);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $kategori = KategoriDua::with('kategoriSatu')->findOrFail($id);
+        return response()->json($kategori);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorizeAccess(['admin', 'manager_keuangan']);
+
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
+        ]);
+
+        $kategori = KategoriDua::create($validated);
+
+        return response()->json(['message' => 'Kategori dua berhasil ditambahkan.', 'data' => $kategori]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(KategoriDua $kategoriDua)
+    public function update(Request $request, $id)
     {
-        //
+        $this->authorizeAccess(['admin', 'manager_keuangan']);
+
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
+        ]);
+
+        $kategori = KategoriDua::findOrFail($id);
+        $kategori->update($validated);
+
+        return response()->json(['message' => 'Kategori dua berhasil diperbarui.', 'data' => $kategori]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(KategoriDua $kategoriDua)
+    public function destroy($id)
     {
-        //
+        $this->authorizeAccess(['admin', 'manager_keuangan']);
+
+        $kategori = KategoriDua::findOrFail($id);
+        $kategori->delete();
+
+        return response()->json(['message' => 'Kategori dua berhasil dihapus.']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, KategoriDua $kategoriDua)
+    private function authorizeAccess(array $allowedRoles)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(KategoriDua $kategoriDua)
-    {
-        //
+        if (!in_array(Auth::user()->role, $allowedRoles)) {
+            abort(403, 'Anda tidak memiliki izin untuk melakukan aksi ini.');
+        }
     }
 }

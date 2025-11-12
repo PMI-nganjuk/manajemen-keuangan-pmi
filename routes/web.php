@@ -11,14 +11,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Contoh route untuk ADMIN
+// route untuk admin
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return 'Admin Dashboard';
     });
 });
 
-// Contoh route untuk STAF_KEUANGAN
+// route untuk staf_keuangan
 Route::middleware(['role:staf_keuangan'])->group(function () {
     Route::get('/keuangan/pengeluaran', function () {
         return 'Halaman Pengeluaran';
@@ -28,7 +28,7 @@ Route::middleware(['role:staf_keuangan'])->group(function () {
     });
 });
 
-// Contoh route untuk MANAJER_KEUANGAN
+// route untuk manager_keuangan
 Route::middleware(['role:manager_keuangan'])->group(function () {
     Route::get('/keuangan/coa', function () {
         return 'Halaman Chart of Account';
@@ -41,7 +41,7 @@ Route::middleware(['role:manager_keuangan'])->group(function () {
     });
 });
 
-// Contoh route untuk PEGAWAI
+//route untuk pegawai biasa
 Route::middleware(['role:pegawai'])->group(function () {
     Route::get('/pegawai/view-data', function () {
         return 'Halaman View Data';
