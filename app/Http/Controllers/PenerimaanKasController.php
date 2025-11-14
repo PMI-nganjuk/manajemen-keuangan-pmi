@@ -13,12 +13,14 @@ class PenerimaanKasController extends Controller
         $this->middleware('role:admin,staf_keuangan,manajer_keuangan,pegawai');
     }
 
+    // Tampilkan daftar penerimaan kas
     public function index()
     {
         $penerimaan = PenerimaanKas::latest()->get();
         return response()->json($penerimaan);
     }
 
+    // Simpan data penerimaan kas
     public function store(Request $request)
     {
         if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
@@ -40,12 +42,14 @@ class PenerimaanKasController extends Controller
         ], 201);
     }
 
+    // Tampilkan detail penerimaan kas berdasarkan ID
     public function show($id)
     {
         $penerimaan = PenerimaanKas::findOrFail($id);
         return response()->json($penerimaan);
     }
 
+    // Update data penerimaan kas
     public function update(Request $request, $id)
     {
         if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
@@ -68,6 +72,7 @@ class PenerimaanKasController extends Controller
         ]);
     }
 
+    // Hapus data penerimaan kas
     public function destroy(Request $request, $id)
     {
         if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {

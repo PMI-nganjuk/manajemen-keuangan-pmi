@@ -14,18 +14,14 @@ class ProfilPmiController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Menampilkan profil PMI
-     */
+    // Menampilkan profil PMI
     public function index()
     {
         $profil = ProfilPmi::first();
         return view('profil_pmi.index', compact('profil'));
     }
 
-    /**
-     * Menampilkan form edit profil PMI (hanya admin)
-     */
+    // Menampilkan form edit profil PMI (hanya admin)
     public function edit()
     {
         $user = Auth::user();
@@ -37,9 +33,7 @@ class ProfilPmiController extends Controller
         return view('profil_pmi.edit', compact('profil'));
     }
 
-    /**
-     * Update profil PMI (hanya admin)
-     */
+    // Update profil PMI (hanya admin)
     public function update(Request $request)
     {
         $user = Auth::user();
