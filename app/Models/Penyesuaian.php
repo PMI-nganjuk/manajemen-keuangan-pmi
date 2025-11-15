@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Penyesuaian extends Model
 {
+<<<<<<< HEAD
     use HasFactory;
 
     protected $table = 'penyesuaian';
@@ -45,4 +46,7 @@ class Penyesuaian extends Model
     {
         return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
     }
+=======
+    //
+>>>>>>> parent of 82fdd83 (revisi erd and final erd.)
 }
