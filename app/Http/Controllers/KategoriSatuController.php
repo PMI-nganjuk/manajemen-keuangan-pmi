@@ -8,21 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class KategoriSatuController extends Controller
 {
-    // Tampilkan semua kategori satu beserta kategori dua terkait
     public function index()
     {
         $kategoriSatu = KategoriSatu::with('kategoriDua')->get();
         return response()->json($kategoriSatu);
     }
 
-    // Tampilkan detail kategori satu berdasarkan ID
     public function show($id)
     {
         $kategori = KategoriSatu::with('kategoriDua')->findOrFail($id);
         return response()->json($kategori);
     }
 
-    // Simpan kategori satu baru
     public function store(Request $request)
     {
         $this->authorizeAccess(['admin', 'manager_keuangan']);
@@ -36,7 +33,6 @@ class KategoriSatuController extends Controller
         return response()->json(['message' => 'Kategori satu berhasil ditambahkan.', 'data' => $kategori]);
     }
 
-    // Update kategori satu
     public function update(Request $request, $id)
     {
         $this->authorizeAccess(['admin', 'manager_keuangan']);
@@ -52,7 +48,6 @@ class KategoriSatuController extends Controller
         return response()->json(['message' => 'Kategori satu berhasil diperbarui.', 'data' => $kategori]);
     }
 
-    // Hapus kategori satu
     public function destroy($id)
     {
         $this->authorizeAccess(['admin', 'manager_keuangan']);
@@ -63,7 +58,6 @@ class KategoriSatuController extends Controller
         return response()->json(['message' => 'Kategori satu berhasil dihapus.']);
     }
 
-    // Fungsi untuk mengotorisasi akses berdasarkan peran pengguna
     private function authorizeAccess(array $allowedRoles)
     {
         if (!in_array(Auth::user()->role, $allowedRoles)) {

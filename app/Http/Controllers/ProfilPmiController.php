@@ -9,14 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfilPmiController extends Controller
 {
+<<<<<<< HEAD
     // Menampilkan profil PMI
+=======
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Menampilkan profil PMI
+     */
+>>>>>>> parent of 6f982c4 (Menambahkan comment di setiap method)
     public function index()
     {
         $profil = ProfilPmi::first();
         return view('profil_pmi.index', compact('profil'));
     }
 
-    // Menampilkan form edit profil PMI (hanya admin)
+    /**
+     * Menampilkan form edit profil PMI (hanya admin)
+     */
     public function edit()
     {
         $user = Auth::user();
@@ -28,7 +41,9 @@ class ProfilPmiController extends Controller
         return view('profil_pmi.edit', compact('profil'));
     }
 
-    // Update profil PMI (hanya admin)
+    /**
+     * Update profil PMI (hanya admin)
+     */
     public function update(Request $request)
     {
         $user = Auth::user();
