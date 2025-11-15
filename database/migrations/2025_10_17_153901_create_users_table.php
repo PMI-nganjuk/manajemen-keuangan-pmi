@@ -15,14 +15,10 @@ return new class extends Migration
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id('id_user');
-<<<<<<< HEAD
                 // enum dibuat menjadi class
                 $table->enum('kategori', ['karyawan', 'donatur', 'kreditur', 'debitur'])->nullable();
-=======
                 $table->enum('kategori', ['admin', 'manager_keuangan', 'staf_keuangan', ['pegawai']])->nullable();
->>>>>>> parent of 82fdd83 (revisi erd and final erd.)
                 $table->string('nama')->nullable();
-                $table->string('name')->nullable(); // keep legacy if used
                 $table->string('nomer_wa')->nullable();
                 $table->string('email')->unique();
                 $table->string('alamat')->nullable();
