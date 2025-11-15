@@ -9,19 +9,6 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    // Konstruktor untuk menerapkan middleware dan kontrol akses berbasis peran (Role-Based Access Control).
-    public function __construct()
-    {
-        $this->middleware('auth');
-
-        $this->middleware(function ($request, $next) {
-            if (auth()->user()->role !== User::ROLE_ADMIN) {
-                return redirect()->route(auth()->user()->role . '.dashboard');
-            }
-            return $next($request);
-        });
-    }
-
     // Menampilkan daftar (listing) semua pengguna (users).
 
      /*
