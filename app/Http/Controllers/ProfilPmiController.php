@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class ProfilPmiController extends Controller
 {
     // Menampilkan profil PMI
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Menampilkan profil PMI
+     */
     public function index()
     {
         $profil = ProfilPmi::first();
