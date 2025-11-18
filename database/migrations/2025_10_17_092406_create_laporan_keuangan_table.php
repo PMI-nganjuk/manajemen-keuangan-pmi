@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Create laporan_keuangan table
         if (!Schema::hasTable('laporan_keuangan')) {
             Schema::create('laporan_keuangan', function (Blueprint $table) {
                 $table->id('id_laporan');
@@ -17,7 +18,7 @@ return new class extends Migration
                 $table->timestamps();
             });
         }
-
+        // Add foreign key to penyesuaian
         if (Schema::hasTable('penyesuaian') && !Schema::hasColumn('penyesuaian', 'id_laporan')) {
             Schema::table('penyesuaian', function (Blueprint $table) {
                 $table->unsignedBigInteger('id_laporan')->nullable()->after('id_program_kerja');
@@ -28,6 +29,7 @@ return new class extends Migration
             });
         }
 
+        // Add foreign key to pengeluaran_kas and penerimaan_kas
         foreach (['pengeluaran_kas', 'penerimaan_kas'] as $tableName) {
             if (Schema::hasTable($tableName) && !Schema::hasColumn($tableName, 'id_laporan')) {
                 Schema::table($tableName, function (Blueprint $table) {
@@ -41,6 +43,7 @@ return new class extends Migration
         }
     }
 
+    //
     public function down(): void
     {
         foreach (['penyesuaian', 'pengeluaran_kas', 'penerimaan_kas'] as $tableName) {

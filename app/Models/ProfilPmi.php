@@ -14,6 +14,7 @@ class ProfilPmi extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
+    // Fillable fields
     protected $fillable = [
         'nama_pmi',
         'alamat',

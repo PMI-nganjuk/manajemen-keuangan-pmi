@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgramKerjaController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); // pastikan user login
-    }
-
     // Menampilkan semua program kerja.
     public function index()
     {

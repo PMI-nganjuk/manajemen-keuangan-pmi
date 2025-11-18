@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Run the migrations.
     public function up(): void
     {
         if (!Schema::hasTable('coa')) {
@@ -19,12 +20,14 @@ return new class extends Migration
         }
     }
 
+    // Relasi ke tabel penyesuaian
     public function penyesuaian()
     {
         return $this->hasMany(Penyesuaian::class, 'id_coa', 'id_coa');
     }
 
 
+    // Reverse the migrations.
     public function down(): void
     {
         Schema::dropIfExists('coa');
