@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ProgramKerja;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProgramKerjaController extends Controller
 {
@@ -15,15 +14,9 @@ class ProgramKerjaController extends Controller
         return response()->json($programKerjas);
     }
 
-    // Simpan program kerja baru (hanya Manager Keuangan & Admin).
+    // Simpan program kerja baru.
     public function store(Request $request)
     {
-        $user = Auth::user();
-
-        if (!in_array($user->role, ['admin', 'manager_keuangan'])) {
-            return response()->json(['message' => 'Akses ditolak'], 403);
-        }
-
         $validated = $request->validate([
             'nama_program'     => 'required|string|max:255',
             'deskripsi'        => 'nullable|string',
@@ -48,15 +41,9 @@ class ProgramKerjaController extends Controller
         return response()->json($programKerja);
     }
 
-    // Update program kerja (hanya Manager Keuangan & Admin).
+    // Update program kerja.
     public function update(Request $request, $id)
     {
-        $user = Auth::user();
-
-        if (!in_array($user->role, ['admin', 'manager_keuangan'])) {
-            return response()->json(['message' => 'Akses ditolak'], 403);
-        }
-
         $programKerja = ProgramKerja::findOrFail($id);
 
         $validated = $request->validate([
@@ -76,15 +63,9 @@ class ProgramKerjaController extends Controller
         ]);
     }
 
-    // Hapus program kerja (hanya Admin).
+    // Hapus program kerja.
     public function destroy($id)
     {
-        $user = Auth::user();
-
-        if ($user->role !== 'admin') {
-            return response()->json(['message' => 'Akses ditolak'], 403);
-        }
-
         $programKerja = ProgramKerja::findOrFail($id);
         $programKerja->delete();
 

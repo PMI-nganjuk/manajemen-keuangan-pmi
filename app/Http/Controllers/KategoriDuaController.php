@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KategoriDua;
 use App\Models\KategoriSatu;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-// Controller untuk mengelola Kategori Dua
 class KategoriDuaController extends Controller
 {
     // Tampilkan semua kategori dua beserta kategori satu terkait
@@ -27,8 +25,6 @@ class KategoriDuaController extends Controller
     // Simpan kategori dua baru
     public function store(Request $request)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
         $validated = $request->validate([
             'nama_kategori' => 'required|string|max:255',
             'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
@@ -36,14 +32,12 @@ class KategoriDuaController extends Controller
 
         $kategori = KategoriDua::create($validated);
 
-        return response()->json(['message' => 'Kategori dua berhasil ditambahkan.', 'data' => $kategori]);
+        return response()->json(['message' => 'Kategori dua berhasil ditambahkan.', 'data' => $kategori], 201);
     }
 
     // Update kategori dua
     public function update(Request $request, $id)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
         $validated = $request->validate([
             'nama_kategori' => 'required|string|max:255',
             'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
@@ -58,19 +52,9 @@ class KategoriDuaController extends Controller
     // Hapus kategori dua
     public function destroy($id)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
         $kategori = KategoriDua::findOrFail($id);
         $kategori->delete();
 
         return response()->json(['message' => 'Kategori dua berhasil dihapus.']);
-    }
-
-    // Fungsi untuk memeriksa otorisasi akses berdasarkan peran pengguna
-    private function authorizeAccess(array $allowedRoles)
-    {
-        if (!in_array(Auth::user()->role, $allowedRoles)) {
-            abort(403, 'Anda tidak memiliki izin untuk melakukan aksi ini.');
-        }
     }
 }

@@ -18,11 +18,6 @@ class PengeluaranKasController extends Controller
     // Simpan data pengeluaran kas
     public function store(Request $request)
     {
-        // Hanya admin, staf keuangan, dan manajer keuangan yang boleh menambah data
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'deskripsi' => 'required|string|max:255',
@@ -47,10 +42,6 @@ class PengeluaranKasController extends Controller
     // Update data pengeluaran kas
     public function update(Request $request, $id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $validated = $request->validate([
             'tanggal' => 'sometimes|date',
             'deskripsi' => 'sometimes|string|max:255',
@@ -68,12 +59,8 @@ class PengeluaranKasController extends Controller
     }
 
     // Hapus data pengeluaran kas
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $pengeluaran = PengeluaranKas::findOrFail($id);
         $pengeluaran->delete();
 

@@ -12,7 +12,8 @@ class PenyesuaianController extends Controller
      */
     public function index()
     {
-        //
+        $items = Penyesuaian::latest()->get();
+        return response()->json($items);
     }
 
     /**
@@ -20,7 +21,7 @@ class PenyesuaianController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['template' => ['tanggal' => null, 'keterangan' => null, 'jumlah' => null]]);
     }
 
     /**
@@ -28,7 +29,15 @@ class PenyesuaianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'tanggal'   => 'required|date',
+            'keterangan'=> 'nullable|string',
+            'jumlah'    => 'required|numeric',
+        ]);
+
+        $item = Penyesuaian::create($validated);
+
+        return response()->json(['message' => 'Penyesuaian berhasil dibuat.', 'data' => $item], 201);
     }
 
     /**
@@ -36,7 +45,7 @@ class PenyesuaianController extends Controller
      */
     public function show(Penyesuaian $penyesuaian)
     {
-        //
+        return response()->json($penyesuaian);
     }
 
     /**
@@ -44,7 +53,7 @@ class PenyesuaianController extends Controller
      */
     public function edit(Penyesuaian $penyesuaian)
     {
-        //
+        return response()->json($penyesuaian);
     }
 
     /**
@@ -52,7 +61,15 @@ class PenyesuaianController extends Controller
      */
     public function update(Request $request, Penyesuaian $penyesuaian)
     {
-        //
+        $validated = $request->validate([
+            'tanggal'   => 'sometimes|required|date',
+            'keterangan'=> 'nullable|string',
+            'jumlah'    => 'sometimes|required|numeric',
+        ]);
+
+        $penyesuaian->update($validated);
+
+        return response()->json(['message' => 'Penyesuaian berhasil diperbarui.', 'data' => $penyesuaian]);
     }
 
     /**
@@ -60,6 +77,8 @@ class PenyesuaianController extends Controller
      */
     public function destroy(Penyesuaian $penyesuaian)
     {
-        //
+        $penyesuaian->delete();
+
+        return response()->json(['message' => 'Penyesuaian berhasil dihapus.']);
     }
 }

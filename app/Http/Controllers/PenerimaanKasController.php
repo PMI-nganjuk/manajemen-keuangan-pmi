@@ -17,10 +17,6 @@ class PenerimaanKasController extends Controller
     // Simpan data penerimaan kas
     public function store(Request $request)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'deskripsi' => 'required|string|max:255',
@@ -46,10 +42,6 @@ class PenerimaanKasController extends Controller
     // Update data penerimaan kas
     public function update(Request $request, $id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $validated = $request->validate([
             'tanggal' => 'sometimes|date',
             'deskripsi' => 'sometimes|string|max:255',
@@ -67,12 +59,8 @@ class PenerimaanKasController extends Controller
     }
 
     // Hapus data penerimaan kas
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $penerimaan = PenerimaanKas::findOrFail($id);
         $penerimaan->delete();
 

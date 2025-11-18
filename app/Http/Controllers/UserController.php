@@ -122,4 +122,17 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
     }
+
+    // test controller
+     /*
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function test()
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Controller berjalan dengan baik',
+        ]);
+    }
+
 }
