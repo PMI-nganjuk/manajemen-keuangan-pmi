@@ -31,6 +31,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getNameAttribute()
+    {
+        return $this->nama ?? 'User';
+    }
+
     // Role
     public const ROLE_ADMIN = 'admin';
     public const ROLE_MANAGER_KEUANGAN = 'manager_keuangan';
