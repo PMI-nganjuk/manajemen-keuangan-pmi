@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PenerimaanKasController extends Controller
 {
+    public function __construct()
+    {
+        // Role-based access
+        $this->middleware('role:admin,staf_keuangan,manajer_keuangan,pegawai');
+    }
+
     // Tampilkan daftar penerimaan kas
     public function index()
     {

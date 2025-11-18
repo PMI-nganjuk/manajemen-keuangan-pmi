@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 // Controller untuk mengelola pengeluaran kas
 class PengeluaranKasController extends Controller
 {
+    // Middleware untuk mengatur akses berdasarkan peran
+    public function __construct()
+    {
+        // Role-based access
+        $this->middleware('role:admin,staf_keuangan,manajer_keuangan,pegawai');
+    }
+
     // Tampilkan daftar pengeluaran kas
     public function index()
     {
