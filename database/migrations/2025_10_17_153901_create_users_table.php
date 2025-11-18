@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // create unified users table with id_user as primary so other FKs work
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id('id_user');
                 // enum dibuat menjadi class
                 $table->enum('kategori', ['karyawan', 'donatur', 'kreditur', 'debitur'])->nullable();
-                $table->enum('kategori', ['admin', 'manager_keuangan', 'staf_keuangan', ['pegawai']])->nullable();
                 $table->string('nama')->nullable();
                 $table->string('nomer_wa')->nullable();
                 $table->string('email')->unique();
                 $table->string('alamat')->nullable();
-                $table->enum('role', ['admin', 'user'])->default('user');
-                $table->string('password')->nullable();
+                $table->enum('role', ['admin', 'manager_keuangan', 'staf_keuangan', 'pegawai'])->default('pegawai');
+
+                $table->string('password');
                 $table->rememberToken();
                 $table->timestamps();
             });
@@ -49,9 +45,6 @@ return new class extends Migration
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('sessions');

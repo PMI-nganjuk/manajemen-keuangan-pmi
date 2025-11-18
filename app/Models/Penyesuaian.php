@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Penyesuaian extends Model
 {
+    use HasFactory;
+
     protected $table = 'penyesuaian';
     protected $primaryKey = 'id_penyesuaian';
     public $incrementing = true;

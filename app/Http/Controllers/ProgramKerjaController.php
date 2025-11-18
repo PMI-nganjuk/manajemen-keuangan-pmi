@@ -8,27 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgramKerjaController extends Controller
 {
-<<<<<<< HEAD
     // Menampilkan semua program kerja.
-=======
-    public function __construct()
-    {
-        $this->middleware('auth'); // pastikan user login
-    }
-
-    /**
-     * Tampilkan semua program kerja.
-     */
->>>>>>> parent of 6f982c4 (Menambahkan comment di setiap method)
     public function index()
     {
         $programKerjas = ProgramKerja::with('kategori')->get();
         return response()->json($programKerjas);
     }
 
-    /**
-     * Simpan program kerja baru (hanya Manager Keuangan & Admin).
-     */
+    // Simpan program kerja baru (hanya Manager Keuangan & Admin).
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -54,18 +41,14 @@ class ProgramKerjaController extends Controller
         ], 201);
     }
 
-    /**
-     * Menampilkan detail program kerja berdasarkan ID.
-     */
+    // Menampilkan detail program kerja berdasarkan ID.
     public function show($id)
     {
         $programKerja = ProgramKerja::with('kategori')->findOrFail($id);
         return response()->json($programKerja);
     }
 
-    /**
-     * Update program kerja (hanya Manager Keuangan & Admin).
-     */
+    // Update program kerja (hanya Manager Keuangan & Admin).
     public function update(Request $request, $id)
     {
         $user = Auth::user();
@@ -93,9 +76,7 @@ class ProgramKerjaController extends Controller
         ]);
     }
 
-    /**
-     * Hapus program kerja (hanya Admin).
-     */
+    // Hapus program kerja (hanya Admin).
     public function destroy($id)
     {
         $user = Auth::user();

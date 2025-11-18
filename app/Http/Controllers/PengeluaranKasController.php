@@ -5,24 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\PengeluaranKas;
 use Illuminate\Http\Request;
 
+// Controller untuk mengelola pengeluaran kas
 class PengeluaranKasController extends Controller
 {
-<<<<<<< HEAD
     // Tampilkan daftar pengeluaran kas
-=======
-    public function __construct()
-    {
-        // Role-based access
-        $this->middleware('role:admin,staf_keuangan,manajer_keuangan,pegawai');
-    }
-
->>>>>>> parent of 6f982c4 (Menambahkan comment di setiap method)
     public function index()
     {
         $pengeluaran = PengeluaranKas::latest()->get();
         return response()->json($pengeluaran);
     }
 
+    // Simpan data pengeluaran kas
     public function store(Request $request)
     {
         // Hanya admin, staf keuangan, dan manajer keuangan yang boleh menambah data
@@ -51,6 +44,7 @@ class PengeluaranKasController extends Controller
         return response()->json($pengeluaran);
     }
 
+    // Update data pengeluaran kas
     public function update(Request $request, $id)
     {
         if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
@@ -73,6 +67,7 @@ class PengeluaranKasController extends Controller
         ]);
     }
 
+    // Hapus data pengeluaran kas
     public function destroy(Request $request, $id)
     {
         if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {

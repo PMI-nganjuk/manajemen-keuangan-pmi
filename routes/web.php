@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengeluaranKasController;
 use App\Http\Controllers\PenerimaanKasController;
@@ -8,12 +9,19 @@ use App\Http\Controllers\KategoriSatuController;
 use App\Http\Controllers\KategoriDuaController;
 use App\Http\Controllers\ProgramKerjaController;
 use App\Http\Controllers\ProfilPmiController;
-
-
+use App\Http\Controllers\CoaController;
+use App\Http\Controllers\PenyesuaianController;
+use App\Http\Controllers\LaporanKeuanganController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// ROUTE COA, PENYESUAIAN, LAPORAN KEUANGAN
+Route::resource('/coa', CoaController::class);
+Route::resource('/penyesuaian', PenyesuaianController::class);
+Route::resource('/laporan-keuangan', LaporanKeuanganController::class);
 
 // route untuk admin
 Route::middleware(['role:admin'])->group(function () {
@@ -45,21 +53,24 @@ Route::middleware(['role:manager_keuangan'])->group(function () {
     });
 });
 
-//route untuk pegawai biasa
+// route untuk pegawai biasa
 Route::middleware(['role:pegawai'])->group(function () {
     Route::get('/pegawai/view-data', function () {
         return 'Halaman View Data';
     });
 });
 
-// Route untuk Pengeluaran dan Penerimaan Kas
+
 Route::middleware(['role:admin,staf_keuangan,manajer_keuangan,pegawai'])->group(function () {
+
+    // Pengeluaran Kas
     Route::get('/pengeluaran', [PengeluaranKasController::class, 'index']);
     Route::get('/pengeluaran/{id}', [PengeluaranKasController::class, 'show']);
     Route::post('/pengeluaran', [PengeluaranKasController::class, 'store']);
     Route::put('/pengeluaran/{id}', [PengeluaranKasController::class, 'update']);
     Route::delete('/pengeluaran/{id}', [PengeluaranKasController::class, 'destroy']);
 
+    // Penerimaan Kas
     Route::get('/penerimaan', [PenerimaanKasController::class, 'index']);
     Route::get('/penerimaan/{id}', [PenerimaanKasController::class, 'show']);
     Route::post('/penerimaan', [PenerimaanKasController::class, 'store']);
@@ -67,8 +78,9 @@ Route::middleware(['role:admin,staf_keuangan,manajer_keuangan,pegawai'])->group(
     Route::delete('/penerimaan/{id}', [PenerimaanKasController::class, 'destroy']);
 });
 
-// Kategori Satu
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Kategori Satu
     Route::get('/kategori-satu', [KategoriSatuController::class, 'index']);
     Route::get('/kategori-satu/{id}', [KategoriSatuController::class, 'show']);
     Route::post('/kategori-satu', [KategoriSatuController::class, 'store']);
