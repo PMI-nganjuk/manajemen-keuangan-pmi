@@ -11,59 +11,31 @@ class KategoriDuaController extends Controller
 {
     public function index()
     {
-        $kategoriDua = KategoriDua::with('kategoriSatu')->get();
-        return response()->json($kategoriDua);
+        // logic removed per user request
     }
 
     public function show($id)
     {
-        $kategori = KategoriDua::with('kategoriSatu')->findOrFail($id);
-        return response()->json($kategori);
+        // logic removed per user request
     }
 
     public function store(Request $request)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
-        ]);
-
-        $kategori = KategoriDua::create($validated);
-
-        return response()->json(['message' => 'Kategori dua berhasil ditambahkan.', 'data' => $kategori]);
+        // logic removed per user request
     }
 
     public function update(Request $request, $id)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'id_kategori1'  => 'required|exists:kategori_satu,id_kategori1',
-        ]);
-
-        $kategori = KategoriDua::findOrFail($id);
-        $kategori->update($validated);
-
-        return response()->json(['message' => 'Kategori dua berhasil diperbarui.', 'data' => $kategori]);
+        // logic removed per user request
     }
 
     public function destroy($id)
     {
-        $this->authorizeAccess(['admin', 'manager_keuangan']);
-
-        $kategori = KategoriDua::findOrFail($id);
-        $kategori->delete();
-
-        return response()->json(['message' => 'Kategori dua berhasil dihapus.']);
+        // logic removed per user request
     }
 
     private function authorizeAccess(array $allowedRoles)
     {
-        if (!in_array(Auth::user()->role, $allowedRoles)) {
-            abort(403, 'Anda tidak memiliki izin untuk melakukan aksi ini.');
-        }
+        // logic removed per user request
     }
 }

@@ -16,9 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-
-        return view('users.index', compact('users'));
+        //
     }
 
     //Menampilkan form untuk membuat pengguna baru.
@@ -28,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        //
     }
 
     //Menyimpan data pengguna baru yang dibuat ke database.
@@ -39,27 +37,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|min:6',
-            'role'      => 'required|in:' . implode(',', User::getRoles()),
-            'kategori'  => ['nullable', Rule::in(User::getKategori())],
-            'nomer_wa'  => 'nullable|string|max:20',
-            'alamat'    => 'nullable|string',
-        ]);
-
-        User::create([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-            'kategori' => $request->kategori,
-            'nomer_wa' => $request->nomer_wa,
-            'alamat'   => $request->alamat,
-        ]);
-
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+        //
     }
 
      // Menampilkan form untuk mengedit pengguna yang ditentukan.
@@ -71,7 +49,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        //
     }
 
     // Memperbarui (update) data pengguna yang ditentukan di database.
@@ -83,37 +61,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $rules = [
-            'nama'      => 'required|string|max:255',
-            'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'      => 'required|in:' . implode(',', User::getRoles()),
-            'kategori'  => ['nullable', Rule::in(User::getKategori())],
-            'nomer_wa'  => 'nullable|string|max:20',
-            'alamat'    => 'nullable|string',
-        ];
-
-        if ($request->filled('password')) {
-            $rules['password'] = 'min:6';
-        }
-
-        $request->validate($rules);
-
-        $user->update([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
-            'role'     => $request->role,
-            'kategori' => $request->kategori,
-            'nomer_wa' => $request->nomer_wa,
-            'alamat'   => $request->alamat,
-        ]);
-
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password)
-            ]);
-        }
-
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+        //
     }
 
     // Menghapus pengguna yang ditentukan dari database.
@@ -124,8 +72,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
-
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        //
     }
 }

@@ -7,81 +7,33 @@ use Illuminate\Http\Request;
 
 class PengeluaranKasController extends Controller
 {
-<<<<<<< HEAD
-    // Tampilkan daftar pengeluaran kas
-=======
     public function __construct()
     {
-        // Role-based access
-        $this->middleware('role:admin,staf_keuangan,manajer_keuangan,pegawai');
+        // logic removed per user request
     }
 
->>>>>>> parent of 6f982c4 (Menambahkan comment di setiap method)
     public function index()
     {
-        $pengeluaran = PengeluaranKas::latest()->get();
-        return response()->json($pengeluaran);
+        // logic removed per user request
     }
 
     public function store(Request $request)
     {
-        // Hanya admin, staf keuangan, dan manajer keuangan yang boleh menambah data
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'deskripsi' => 'required|string|max:255',
-            'jumlah' => 'required|numeric|min:0',
-            'kategori_id' => 'required|integer',
-        ]);
-
-        $data = PengeluaranKas::create($validated);
-
-        return response()->json([
-            'message' => 'Data pengeluaran berhasil ditambahkan',
-            'data' => $data
-        ], 201);
+        // logic removed per user request
     }
 
     public function show($id)
     {
-        $pengeluaran = PengeluaranKas::findOrFail($id);
-        return response()->json($pengeluaran);
+        // logic removed per user request
     }
 
     public function update(Request $request, $id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $validated = $request->validate([
-            'tanggal' => 'sometimes|date',
-            'deskripsi' => 'sometimes|string|max:255',
-            'jumlah' => 'sometimes|numeric|min:0',
-            'kategori_id' => 'sometimes|integer',
-        ]);
-
-        $pengeluaran = PengeluaranKas::findOrFail($id);
-        $pengeluaran->update($validated);
-
-        return response()->json([
-            'message' => 'Data pengeluaran berhasil diperbarui',
-            'data' => $pengeluaran
-        ]);
+        // logic removed per user request
     }
 
     public function destroy(Request $request, $id)
     {
-        if (!in_array($request->user()->role, ['admin', 'staf_keuangan', 'manajer_keuangan'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $pengeluaran = PengeluaranKas::findOrFail($id);
-        $pengeluaran->delete();
-
-        return response()->json(['message' => 'Data pengeluaran berhasil dihapus']);
+        // logic removed per user request
     }
 }
