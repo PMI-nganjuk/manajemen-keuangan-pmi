@@ -19,7 +19,7 @@ return new class extends Migration
 
                 // Foreign keys
                 $table->unsignedBigInteger('id_user');
-                $table->unsignedBigInteger('id_coa');
+                $table->string('id_coa');
                 $table->unsignedBigInteger('id_program_kerja');
                 $table->unsignedBigInteger('id_laporan');
 

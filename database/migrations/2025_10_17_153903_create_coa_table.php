@@ -10,7 +10,7 @@ return new class extends Migration
     {
         if (!Schema::hasTable('coa')) {
             Schema::create('coa', function (Blueprint $table) {
-                $table->id('id_coa');
+                $table->string('id_coa')->primary();
                 $table->string('nama_akun');
                 $table->string('pos_saldo');
                 $table->string('pos_laporan');
@@ -18,12 +18,6 @@ return new class extends Migration
             });
         }
     }
-
-    public function penyesuaian()
-    {
-        return $this->hasMany(Penyesuaian::class, 'id_coa', 'id_coa');
-    }
-
 
     public function down(): void
     {

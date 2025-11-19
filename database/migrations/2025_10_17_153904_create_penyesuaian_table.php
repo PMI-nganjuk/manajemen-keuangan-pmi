@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('saldo_awal')->default(0);
 
             // Foreign keys
-            $table->unsignedBigInteger('id_coa');
+            $table->string('id_coa');
             $table->unsignedBigInteger('id_program_kerja');
             $table->unsignedBigInteger('id_laporan')->nullable();
 

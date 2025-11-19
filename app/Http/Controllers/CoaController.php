@@ -29,13 +29,14 @@ class CoaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_coa' => 'required|string|unique:coa,id_coa',
             'nama_akun' => 'required|string',
             'pos_saldo' => 'required|string',
             'pos_laporan' => 'required|string',
         ]);
 
         $data = Coa::create($request->only([
-            'nama_akun', 'pos_saldo', 'pos_laporan'
+            'id_coa', 'nama_akun', 'pos_saldo', 'pos_laporan'
         ]));
 
         return response()->json([

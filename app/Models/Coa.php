@@ -11,10 +11,11 @@ class Coa extends Model
 
     protected $table = 'coa';
     protected $primaryKey = 'id_coa';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
+        'id_coa',
         'nama_akun',
         'pos_saldo',
         'pos_laporan',
