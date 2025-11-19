@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Filament\Resources\ProgramKerjas;
+
+use App\Filament\Resources\ProgramKerjas\Pages\CreateProgramKerja;
+use App\Filament\Resources\ProgramKerjas\Pages\EditProgramKerja;
+use App\Filament\Resources\ProgramKerjas\Pages\ListProgramKerjas;
+use App\Filament\Resources\ProgramKerjas\Schemas\ProgramKerjaForm;
+use App\Filament\Resources\ProgramKerjas\Tables\ProgramKerjasTable;
+use App\Models\ProgramKerja;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+use UnitEnum;
+
+class ProgramKerjaResource extends Resource
+{
+    protected static ?string $model = ProgramKerja::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Program & Organisasi';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Program Kerja';
+    }
+
+        public static function getPluralLabel(): string
+    {
+        return 'Program Kerja';
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return ProgramKerjaForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return ProgramKerjasTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListProgramKerjas::route('/'),
+            'create' => CreateProgramKerja::route('/create'),
+            'edit' => EditProgramKerja::route('/{record}/edit'),
+        ];
+    }
+}

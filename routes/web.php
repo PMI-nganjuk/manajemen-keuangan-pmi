@@ -13,6 +13,7 @@ use App\Http\Controllers\CoaController;
 use App\Http\Controllers\PenyesuaianController;
 use App\Http\Controllers\LaporanKeuanganController;
 
+// Halaman depan / landing page
 Route::get('/', function () {
     return view('welcome');
 });

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ProfilPmi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProfilPmiController extends Controller
@@ -16,26 +15,16 @@ class ProfilPmiController extends Controller
         return view('profil_pmi.index', compact('profil'));
     }
 
-    // Menampilkan form edit profil PMI (hanya admin)
+    // Menampilkan form edit profil PMI
     public function edit()
     {
-        $user = Auth::user();
-        if ($user->role !== 'admin') {
-            abort(403, 'Akses ditolak.');
-        }
-
         $profil = ProfilPmi::first();
         return view('profil_pmi.edit', compact('profil'));
     }
 
-    // Update profil PMI (hanya admin)
+    // Update profil PMI
     public function update(Request $request)
     {
-        $user = Auth::user();
-        if ($user->role !== 'admin') {
-            abort(403, 'Akses ditolak.');
-        }
-
         $request->validate([
             'nama_lembaga' => 'required|string|max:255',
             'alamat'       => 'required|string',

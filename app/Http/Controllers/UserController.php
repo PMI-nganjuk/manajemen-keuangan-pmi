@@ -10,7 +10,6 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     // Menampilkan daftar (listing) semua pengguna (users).
-
      /*
      * @return \Illuminate\View\View
      */
@@ -22,7 +21,6 @@ class UserController extends Controller
     }
 
     //Menampilkan form untuk membuat pengguna baru.
-
      /*
      * @return \Illuminate\View\View
      */
@@ -32,7 +30,6 @@ class UserController extends Controller
     }
 
     //Menyimpan data pengguna baru yang dibuat ke database.
-
      /*
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -64,7 +61,6 @@ class UserController extends Controller
 
      // Menampilkan form untuk mengedit pengguna yang ditentukan.
      // Menggunakan Route Model Binding untuk resolusi otomatis User.
-
      /*
      * @param  \App\Models\User  $user
      * @return \Illuminate\View\View
@@ -75,7 +71,6 @@ class UserController extends Controller
     }
 
     // Memperbarui (update) data pengguna yang ditentukan di database.
-
     /*
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
@@ -117,7 +112,6 @@ class UserController extends Controller
     }
 
     // Menghapus pengguna yang ditentukan dari database.
-
      /*
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
@@ -128,4 +122,17 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
     }
+
+    // test controller
+     /*
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function test()
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Controller berjalan dengan baik',
+        ]);
+    }
+
 }

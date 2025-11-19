@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Run the migrations.
     public function up(): void
     {
         Schema::create('profil_pmi', function (Blueprint $table) {
@@ -24,6 +25,7 @@ return new class extends Migration
         });
     }
 
+    // Reverse the migrations.
     public function down(): void
     {
         Schema::dropIfExists('profil_pmi');
