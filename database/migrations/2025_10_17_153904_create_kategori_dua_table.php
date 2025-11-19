@@ -14,7 +14,7 @@ return new class extends Migration
                 $table->id('id_kategori2');
                 $table->string('nama_kategori');
                 $table->unsignedBigInteger('id_kategori1');
-                $table->unsignedBigInteger('id_coa');
+                $table->string('id_coa');
                 $table->timestamps();
 
                 // Relasi kategori satu
