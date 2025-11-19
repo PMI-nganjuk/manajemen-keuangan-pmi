@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class PenyesuaianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display a listing of the resource.
     public function index()
     {
         return response()->json(
@@ -17,17 +15,13 @@ class PenyesuaianController extends Controller
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the form for creating a new resource.
     public function create()
     {
         return response()->json(['message' => 'Form create Penyesuaian']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a newly created resource in storage.
     public function store(Request $request)
     {
         $request->validate([
@@ -53,9 +47,7 @@ class PenyesuaianController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Display the specified resource.
     public function show(Penyesuaian $penyesuaian)
     {
         return response()->json(
@@ -63,9 +55,7 @@ class PenyesuaianController extends Controller
         );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Show the form for editing the specified resource.
     public function edit(Penyesuaian $penyesuaian)
     {
         return response()->json([
@@ -74,9 +64,7 @@ class PenyesuaianController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // Update the specified resource in storage.
     public function update(Request $request, Penyesuaian $penyesuaian)
     {
         $request->validate([
@@ -101,9 +89,7 @@ class PenyesuaianController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Remove the specified resource from storage.
     public function destroy(Penyesuaian $penyesuaian)
     {
         $penyesuaian->delete();

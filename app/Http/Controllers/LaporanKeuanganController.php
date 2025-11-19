@@ -6,26 +6,20 @@ use App\Models\LaporanKeuangan;
 use Illuminate\Http\Request;
 
 class LaporanKeuanganController extends Controller
-{ 
-    /**
-     * Display a listing of the resource.
-     */
+{
+    // Display a listing of the resource.
     public function index()
     {
         return response()->json(LaporanKeuangan::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the form for creating a new resource.
     public function create()
     {
         return response()->json(['message' => 'Form create laporan keuangan']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a newly created resource in storage.
     public function store(Request $request)
     {
          $request->validate([
@@ -44,17 +38,13 @@ class LaporanKeuanganController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Display the specified resource.
     public function show(LaporanKeuangan $laporanKeuangan)
     {
         return response()->json($laporanKeuangan);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Show the form for editing the specified resource.
     public function edit(LaporanKeuangan $laporanKeuangan)
     {
         return response()->json([
@@ -63,9 +53,7 @@ class LaporanKeuanganController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // Update the specified resource in storage.
     public function update(Request $request, LaporanKeuangan $laporanKeuangan)
     {
         $request->validate([
@@ -86,9 +74,7 @@ class LaporanKeuanganController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Remove the specified resource from storage.
     public function destroy(LaporanKeuangan $laporanKeuangan)
     {
         $laporanKeuangan->delete();

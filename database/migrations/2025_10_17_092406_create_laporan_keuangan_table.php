@@ -43,7 +43,7 @@ return new class extends Migration
         }
     }
 
-    //
+    // Reverse the migrations.
     public function down(): void
     {
         foreach (['penyesuaian', 'pengeluaran_kas', 'penerimaan_kas'] as $tableName) {
