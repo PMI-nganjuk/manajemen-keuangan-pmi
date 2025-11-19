@@ -43,7 +43,10 @@ class ProfilPmi extends Page implements HasForms
 
     public function form(Schema $schema): Schema
     {
+        $isReadOnly = !auth()->user()->hasRole('admin');
+
         return $schema
+            ->disabled($isReadOnly)
             ->schema([
                 Section::make('Informasi Umum')
                     ->schema([

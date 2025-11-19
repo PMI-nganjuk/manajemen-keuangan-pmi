@@ -70,6 +70,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasRole($role): bool
+    {
+        return $this->role === $role;
+    }
+
    // encrypt password saat diset
     public function setPasswordAttribute($value)
     {
