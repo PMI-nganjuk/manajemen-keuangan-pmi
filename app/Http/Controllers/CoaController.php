@@ -12,7 +12,7 @@ class CoaController extends Controller
      */
     public function index()
     {
-        //
+       return response()->json(Coa::all());
     }
 
     /**
@@ -20,7 +20,7 @@ class CoaController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Form create COA']);
     }
 
     /**
@@ -28,7 +28,21 @@ class CoaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_coa' => 'required|string|unique:coa,id_coa',
+            'nama_akun' => 'required|string',
+            'pos_saldo' => 'required|string',
+            'pos_laporan' => 'required|string',
+        ]);
+
+        $data = Coa::create($request->only([
+            'id_coa', 'nama_akun', 'pos_saldo', 'pos_laporan'
+        ]));
+
+        return response()->json([
+            'message' => 'COA berhasil ditambahkan',
+            'data' => $data
+        ]);
     }
 
     /**
@@ -36,7 +50,7 @@ class CoaController extends Controller
      */
     public function show(Coa $coa)
     {
-        //
+        return response()->json($coa);
     }
 
     /**
@@ -44,7 +58,10 @@ class CoaController extends Controller
      */
     public function edit(Coa $coa)
     {
-        //
+        return response()->json([
+            'message' => 'Form edit COA',
+            'data' => $coa
+        ]);
     }
 
     /**
@@ -52,7 +69,20 @@ class CoaController extends Controller
      */
     public function update(Request $request, Coa $coa)
     {
-        //
+        $request ->validate([
+            'nama_akun' => 'sometimes|required|string',
+            'pos_saldo' => 'sometimes|required|string',
+            'pos_laporan' => 'sometimes|required|string',
+        ]);
+
+        $coa->update($request->only([
+            'nama_akun', 'pos_saldo', 'pos_laporan'
+        ]));
+
+        return response()->json([
+            'message' => 'COA berhasil diupdate',
+            'data' => $coa
+        ]);
     }
 
     /**
@@ -60,6 +90,10 @@ class CoaController extends Controller
      */
     public function destroy(Coa $coa)
     {
-        //
+        $coa->delete();
+
+        return response()->json([
+            'message' => 'COA berhasil dihapus'
+        ]);
     }
 }

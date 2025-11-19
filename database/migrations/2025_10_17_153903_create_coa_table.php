@@ -11,7 +11,7 @@ return new class extends Migration
     {
         if (!Schema::hasTable('coa')) {
             Schema::create('coa', function (Blueprint $table) {
-                $table->id('id_coa');
+                $table->string('id_coa')->primary();
                 $table->string('nama_akun');
                 $table->string('pos_saldo');
                 $table->string('pos_laporan');
@@ -20,14 +20,6 @@ return new class extends Migration
         }
     }
 
-    // Relasi ke tabel penyesuaian
-    public function penyesuaian()
-    {
-        return $this->hasMany(Penyesuaian::class, 'id_coa', 'id_coa');
-    }
-
-
-    // Reverse the migrations.
     public function down(): void
     {
         Schema::dropIfExists('coa');
