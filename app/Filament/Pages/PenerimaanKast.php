@@ -2,18 +2,19 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Pages\Page;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use App\Models\PenerimaanKas as PenerimaanKasModel;
 use UnitEnum;
 use BackedEnum;
 
-class PenerimaanKas extends Page implements HasForms
+class PenerimaanKast extends Page implements HasForms
 {
     use InteractsWithForms;
 
@@ -24,12 +25,12 @@ class PenerimaanKas extends Page implements HasForms
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
 
     public ?array $data = [];
-    public ?PenerimaanKas $kas;
+    public ?PenerimaanKasModel $kas;
 
     public function mount(): void
     {
         // Ambil data pertama, atau buat objek kosong
-        $this->kas = PenerimaanKas::first() ?? new PenerimaanKas();
+        $this->kas = PenerimaanKasModel::first() ?? new PenerimaanKasModel();
 
         // Isi form state
         $this->form->fill(
@@ -93,7 +94,7 @@ class PenerimaanKas extends Page implements HasForms
         $validated = $this->form->getState();
 
         if (!$this->kas->exists) {
-            $this->kas = PenerimaanKas::create($validated);
+            $this->kas = PenerimaanKasModel::create($validated);
         } else {
             $this->kas->update($validated);
         }

@@ -1,3 +1,3 @@
-<x-filament-panels::page>
-    {{-- Page content --}}
-</x-filament-panels::page>
+<x-filament::page>
+    <h1>Penerimaan Kas</h1>
+</x-filament::page>
