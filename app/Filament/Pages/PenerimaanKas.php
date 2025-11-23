@@ -17,11 +17,11 @@ class PenerimaanKas extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    // protected string $view = 'filament.pages.penerimaan-kas';
-    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
-    // protected static ?string $navigationLabel = 'Penerimaan Kas';
-    // protected static ?string $title = 'Penerimaan Kas';
-    // protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
+    protected string $view = 'filament.pages.penerimaan-kas';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+    protected static ?string $navigationLabel = 'Penerimaan Kas';
+    protected static ?string $title = 'Penerimaan Kas';
+    protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
 
     public ?array $data = [];
     public ?PenerimaanKas $kas;

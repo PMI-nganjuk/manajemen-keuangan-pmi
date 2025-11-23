@@ -14,11 +14,11 @@ class Coa extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    // protected string $view = 'filament.pages.coa';
-    // protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBox;
-    // protected static ?string $navigationLabel = 'Chart of Accounts (COA)';
-    // protected static ?string $title = 'Chart of Accounts (COA)';
-    // protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
+    protected string $view = 'filament.pages.coa';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBox;
+    protected static ?string $navigationLabel = 'Chart of Accounts (COA)';
+    protected static ?string $title = 'Chart of Accounts (COA)';
+    protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
 
 
     public ?array $data = [];
