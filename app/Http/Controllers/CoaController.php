@@ -4,22 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Coa;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class CoaController extends Controller
 {
-    // Display a listing of the resource.
+    // Display all COA
     public function index()
     {
-       return response()->json(Coa::all());
+        return response()->json(Coa::all());
     }
 
-    // Show the form for creating a new resource.
+    // Create form (just info)
     public function create()
     {
         return response()->json(['message' => 'Form create COA']);
     }
 
-    // Store a newly created resource in storage.
+    // Store COA
     public function store(Request $request)
     {
         $request->validate([
@@ -39,13 +41,13 @@ class CoaController extends Controller
         ]);
     }
 
-    // Display the specified resource.
+    // Show COA by ID
     public function show(Coa $coa)
     {
         return response()->json($coa);
     }
 
-    // Show the form for editing the specified resource.
+    // Edit form
     public function edit(Coa $coa)
     {
         return response()->json([
@@ -54,10 +56,10 @@ class CoaController extends Controller
         ]);
     }
 
-    // Update the specified resource in storage.
+    // Update COA
     public function update(Request $request, Coa $coa)
     {
-        $request ->validate([
+        $request->validate([
             'nama_akun' => 'sometimes|required|string',
             'pos_saldo' => 'sometimes|required|string',
             'pos_laporan' => 'sometimes|required|string',
@@ -73,7 +75,7 @@ class CoaController extends Controller
         ]);
     }
 
-    // Remove the specified resource from storage.
+    // Delete COA
     public function destroy(Coa $coa)
     {
         $coa->delete();
@@ -81,5 +83,56 @@ class CoaController extends Controller
         return response()->json([
             'message' => 'COA berhasil dihapus'
         ]);
+    }
+
+    // IMPORT COA
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        $rows = Excel::toArray([], $request->file('file'))[0];
+
+        foreach ($rows as $i => $row) {
+            if ($i == 0) continue; // skip header
+            if (!isset($row[0]) || $row[0] == null) continue;
+
+            Coa::updateOrCreate(
+                ['id_coa' => $row[0]],
+                [
+                    'nama_akun'   => $row[3] ?? '',
+                    'pos_saldo'   => $row[4] ?? '',
+                    'pos_laporan' => $row[5] ?? '',
+                ]
+            );
+        }
+
+        return response()->json([
+            'message' => 'Import COA berhasil'
+        ]);
+    }
+
+    // EXPORT COA
+    public function exportExcel()
+    {
+        $data = Coa::all()->map(function ($item) {
+            return [
+                'COA'         => $item->id_coa,
+                'Kategori 1'  => '',
+                'Kategori 2'  => '',
+                'Nama Akun'   => $item->nama_akun,
+                'Pos Saldo'   => $item->pos_saldo,
+                'Pos Laporan' => $item->pos_laporan,
+            ];
+        });
+
+        $export = new class($data) implements FromCollection {
+            protected $data;
+            public function __construct($data) { $this->data = $data; }
+            public function collection() { return $this->data; }
+        };
+
+        return Excel::download($export, 'COA.xlsx');
     }
 }

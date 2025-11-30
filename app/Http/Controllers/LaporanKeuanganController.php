@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\LaporanKeuangan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class LaporanKeuanganController extends Controller
 {
@@ -25,7 +27,7 @@ class LaporanKeuanganController extends Controller
          $request->validate([
             'kas_tahun1' => 'required|integer|min:0',
             'kas_tahun2' => 'required|integer|min:0',
-        ]);
+         ]);
 
         $input = $request->only(['kas_tahun1', 'kas_tahun2']);
         $input['saldo_akhir'] = $input['kas_tahun2'] - $input['kas_tahun1'];
@@ -83,4 +85,53 @@ class LaporanKeuanganController extends Controller
             'message' => 'Laporan keuangan berhasil dihapus'
         ]);
     }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        // read sheet 1
+        $rows = Excel::toArray([], $request->file('file'))[0];
+
+        foreach ($rows as $i => $row) {
+            if ($i === 0) continue; // skip header
+
+            if (!$row || !isset($row[0]) || !isset($row[1])) continue;
+
+            $kas1 = (int) $row[0];
+            $kas2 = (int) $row[1];
+
+            LaporanKeuangan::create([
+                'kas_tahun1'  => $kas1,
+                'kas_tahun2'  => $kas2,
+                'saldo_akhir' => $kas2 - $kas1
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Import laporan keuangan berhasil'
+        ]);
+    }
+
+    public function exportExcel()
+    {
+        $data = LaporanKeuangan::all()->map(function ($item) {
+            return [
+                'Kas Tahun 1' => $item->kas_tahun1,
+                'Kas Tahun 2' => $item->kas_tahun2,
+                'Saldo Akhir' => $item->saldo_akhir,
+            ];
+        });
+
+        $export = new class($data) implements FromCollection {
+            protected $data;
+            public function __construct($data) { $this->data = $data; }
+            public function collection() { return $this->data; }
+        };
+
+        return Excel::download($export, 'Laporan_Keuangan.xlsx');
+    }
 }
+
