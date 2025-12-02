@@ -3,26 +3,26 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
-use App\Exports\Sheets\UserSheet;
-use App\Exports\Sheets\ProgramKerjaSheet;
+use App\Exports\Sheets\UserExport;
+use App\Exports\Sheets\ProgramKerjaExport;
 use App\Exports\Sheets\PenerimaanKasSheet;
-use App\Exports\Sheets\PengeluaranKasSheet;
-use App\Exports\Sheets\PenyesuaianSheet;
-use App\Exports\Sheets\ProfilPmiSheet;
-use App\Exports\Sheets\CoaSheet;
+use App\Exports\Sheets\PengeluaranKasExport;
+use App\Exports\Sheets\PenyesuaianExport;
+use App\Exports\Sheets\ProfilPmiExport;
+use App\Exports\Sheets\CoaExport;
 
 class LaporanKeuanganExport implements WithMultipleSheets
 {
     public function sheets(): array
     {
         return [
-            new UserSheet(),
-            new ProgramKerjaSheet(),
+            new UserExport(),
+            new ProgramKerjaExport(),
             new PenerimaanKasSheet(),
-            new PengeluaranKasSheet(),
-            new PenyesuaianSheet(),
-            new ProfilPmiSheet(),
-            new CoaSheet(),
+            new PengeluaranKasExport(),
+            new PenyesuaianExport(),
+            new ProfilPmiExport(),
+            new CoaExport(),
         ];
     }
 }

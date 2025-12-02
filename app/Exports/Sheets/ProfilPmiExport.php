@@ -2,13 +2,13 @@
 
 namespace App\Exports\Sheets;
 
-use App\Models\Penyesuaian;
+use App\Models\ProfilPmi;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class PenyesuaianSheet implements FromCollection
+class ProfilPmiExport implements FromCollection
 {
     public function collection()
     {
-        return Penyesuaian::all();
+        return ProfilPmi::all();
     }
 }

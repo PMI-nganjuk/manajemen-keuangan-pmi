@@ -2,13 +2,13 @@
 
 namespace App\Exports\Sheets;
 
-use App\Models\PenerimaanKas;
+use App\Models\Coa;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class PenerimaanKasSheet implements FromCollection
+class CoaExport implements FromCollection
 {
     public function collection()
     {
-        return PenerimaanKas::all();
+        return Coa::all();
     }
 }

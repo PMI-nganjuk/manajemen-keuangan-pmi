@@ -2,13 +2,13 @@
 
 namespace App\Exports\Sheets;
 
-use App\Models\PengeluaranKas;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class PengeluaranKasSheet implements FromCollection
+class UserExport implements FromCollection
 {
     public function collection()
     {
-        return PengeluaranKas::all();
+        return User::all();
     }
 }

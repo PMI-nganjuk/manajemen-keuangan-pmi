@@ -2,13 +2,13 @@
 
 namespace App\Exports\Sheets;
 
-use App\Models\Coa;
+use App\Models\Penyesuaian;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class CoaSheet implements FromCollection
+class PenyesuaianExport implements FromCollection
 {
     public function collection()
     {
-        return Coa::all();
+        return Penyesuaian::all();
     }
 }
