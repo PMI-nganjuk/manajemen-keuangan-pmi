@@ -12,6 +12,8 @@ return new class extends Migration
         if (!Schema::hasTable('coa')) {
             Schema::create('coa', function (Blueprint $table) {
                 $table->string('id_coa')->primary();
+                $table->string('kategori_1')->nullable();
+                $table->string('kategori_2')->nullable();
                 $table->string('nama_akun');
                 $table->string('pos_saldo');
                 $table->string('pos_laporan');

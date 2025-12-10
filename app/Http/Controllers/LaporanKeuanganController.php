@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LaporanKeuangan;
+use App\Models\Coa;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -12,22 +13,77 @@ class LaporanKeuanganController extends Controller
     // Display a listing of the resource.
     public function index()
     {
-        return response()->json(LaporanKeuangan::all());
+        // Ambil COA untuk membentuk laporan neraca
+        $coa = Coa::select('id_coa', 'kategori_1', 'kategori_2', 'nama_akun', 'pos_saldo')
+            ->orderBy('kategori_1')
+            ->orderBy('kategori_2')
+            ->get();
+
+        $grouped = [
+            'Aset Lancar'           => [],
+            'Aset Tidak Lancar'     => [],
+            'Liabilitas Lancar'     => [],
+            'Liabilitas Tidak Lancar' => [],
+            'Aset Netto'            => [],
+        ];
+
+        foreach ($coa as $row) {
+            $main = strtolower($row->kategori_1 ?? '');
+
+            if (str_contains($main, 'aset lancar')) {
+                $grouped['Aset Lancar'][] = [
+                    'coa'        => $row->id_coa,
+                    'kategori_2' => $row->kategori_2,
+                    'nama_akun'  => $row->nama_akun,
+                    'pos_saldo'  => $row->pos_saldo,
+                ];
+            } elseif (str_contains($main, 'aset tidak lancar')) {
+                $grouped['Aset Tidak Lancar'][] = [
+                    'coa'        => $row->id_coa,
+                    'kategori_2' => $row->kategori_2,
+                    'nama_akun'  => $row->nama_akun,
+                    'pos_saldo'  => $row->pos_saldo,
+                ];
+            } elseif (str_contains($main, 'liabilitas lancar')) {
+                $grouped['Liabilitas Lancar'][] = [
+                    'coa'        => $row->id_coa,
+                    'kategori_2' => $row->kategori_2,
+                    'nama_akun'  => $row->nama_akun,
+                    'pos_saldo'  => $row->pos_saldo,
+                ];
+            } elseif (str_contains($main, 'liabilitas tidak lancar')) {
+                $grouped['Liabilitas Tidak Lancar'][] = [
+                    'coa'        => $row->id_coa,
+                    'kategori_2' => $row->kategori_2,
+                    'nama_akun'  => $row->nama_akun,
+                    'pos_saldo'  => $row->pos_saldo,
+                ];
+            } elseif (str_contains($main, 'aset netto')) {
+                $grouped['Aset Netto'][] = [
+                    'coa'        => $row->id_coa,
+                    'kategori_2' => $row->kategori_2,
+                    'nama_akun'  => $row->nama_akun,
+                    'pos_saldo'  => $row->pos_saldo,
+                ];
+            }
+        }
+
+        return response()->json([
+            'laporan_neraca' => $grouped
+        ]);
     }
 
-    // Show the form for creating a new resource.
     public function create()
     {
         return response()->json(['message' => 'Form create laporan keuangan']);
     }
 
-    // Store a newly created resource in storage.
     public function store(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'kas_tahun1' => 'required|integer|min:0',
             'kas_tahun2' => 'required|integer|min:0',
-         ]);
+        ]);
 
         $input = $request->only(['kas_tahun1', 'kas_tahun2']);
         $input['saldo_akhir'] = $input['kas_tahun2'] - $input['kas_tahun1'];
@@ -36,26 +92,23 @@ class LaporanKeuanganController extends Controller
 
         return response()->json([
             'message' => 'Laporan keuangan berhasil ditambahkan',
-            'data' => $data
+            'data'    => $data
         ]);
     }
 
-    // Display the specified resource.
     public function show(LaporanKeuangan $laporanKeuangan)
     {
         return response()->json($laporanKeuangan);
     }
 
-    // Show the form for editing the specified resource.
     public function edit(LaporanKeuangan $laporanKeuangan)
     {
         return response()->json([
             'message' => 'Form edit laporan keuangan',
-            'data' => $laporanKeuangan
+            'data'    => $laporanKeuangan
         ]);
     }
 
-    // Update the specified resource in storage.
     public function update(Request $request, LaporanKeuangan $laporanKeuangan)
     {
         $request->validate([
@@ -64,19 +117,18 @@ class LaporanKeuanganController extends Controller
         ]);
 
         $laporanKeuangan->update([
-            'kas_tahun1' => $request->kas_tahun1 ?? $laporanKeuangan->kas_tahun1,
-            'kas_tahun2' => $request->kas_tahun2 ?? $laporanKeuangan->kas_tahun2,
+            'kas_tahun1'  => $request->kas_tahun1 ?? $laporanKeuangan->kas_tahun1,
+            'kas_tahun2'  => $request->kas_tahun2 ?? $laporanKeuangan->kas_tahun2,
             'saldo_akhir' => ($request->kas_tahun2 ?? $laporanKeuangan->kas_tahun2)
-                             - ($request->kas_tahun1 ?? $laporanKeuangan->kas_tahun1),
+                           - ($request->kas_tahun1 ?? $laporanKeuangan->kas_tahun1),
         ]);
 
         return response()->json([
             'message' => 'Laporan keuangan berhasil diperbarui',
-            'data' => $laporanKeuangan
+            'data'    => $laporanKeuangan
         ]);
     }
 
-    // Remove the specified resource from storage.
     public function destroy(LaporanKeuangan $laporanKeuangan)
     {
         $laporanKeuangan->delete();
@@ -92,12 +144,10 @@ class LaporanKeuanganController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        // read sheet 1
         $rows = Excel::toArray([], $request->file('file'))[0];
 
         foreach ($rows as $i => $row) {
             if ($i === 0) continue; // skip header
-
             if (!$row || !isset($row[0]) || !isset($row[1])) continue;
 
             $kas1 = (int) $row[0];
@@ -134,4 +184,3 @@ class LaporanKeuanganController extends Controller
         return Excel::download($export, 'Laporan_Keuangan.xlsx');
     }
 }
-
