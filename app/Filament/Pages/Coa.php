@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Coa as CoaModel;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
@@ -82,7 +83,10 @@ class Coa extends Page implements HasForms, HasTable
         $this->reset('formData');
         $this->form->fill();
 
-        $this->notify('success', 'Data COA berhasil ditambahkan!');
+        Notification::make()
+            ->title('Data COA berhasil ditambahkan!')
+            ->success()
+            ->send();
     }
 
     public function table(Table $table): Table

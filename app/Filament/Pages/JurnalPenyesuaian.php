@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Penyesuaian;
 use Filament\Pages\Page;
+use Filament\Notifications\Notification;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
@@ -29,9 +30,6 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
     use InteractsWithTable;
 
     protected string $view = 'filament.pages.jurnal-penyesuaian';
-
-    // ✅ penting untuk routing Filament
-    protected static ?string $slug = 'jurnal-penyesuaian';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
     protected static ?string $navigationLabel = 'Jurnal Penyesuaian';
     protected static ?string $title = 'Jurnal Penyesuaian';
@@ -114,7 +112,10 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
         $this->reset('formData');
         $this->form->fill();
 
-        $this->notify('success', 'Jurnal Penyesuaian berhasil ditambahkan!');
+        Notification::make()
+            ->title('Data Penyesuaian berhasil ditambahkan!')
+            ->success()
+            ->send();
     }
 
     public function table(Table $table): Table
