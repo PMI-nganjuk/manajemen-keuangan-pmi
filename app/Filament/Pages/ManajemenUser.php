@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
-use App\Models\ProgramKerja as ProgramKerjaModel;
 use Filament\Schemas\Schema;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -28,16 +27,16 @@ use App\Models\User;
 use BackedEnum;
 use UnitEnum;
 
-class ProgramKerja extends Page implements HasForms, HasTable
+class ManajemenUser extends Page implements HasForms, HasTable
 {
     use Forms\Concerns\InteractsWithForms;
     use Tables\Concerns\InteractsWithTable;
 
-    protected static ?string $title = 'Program Kerja';
-    protected static ?string $navigationLabel = 'Program Kerja';
+    protected static ?string $title = 'Daftar Pegawai';
+    protected static ?string $navigationLabel = 'Daftar Pegawai';
     protected static string | UnitEnum | null $navigationGroup = 'Program & Organisasi';
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBriefcase;
-    protected string $view = 'filament.pages.program-kerja';
+    protected static string | BackedEnum |null $navigationIcon = Heroicon::OutlinedUsers;
+    protected string $view = 'filament.pages.manajemen-user';
 
     public ?array $data = [];
 
@@ -52,15 +51,36 @@ class ProgramKerja extends Page implements HasForms, HasTable
             ->schema([
                 Grid::make(2)
                     ->schema([
-                        TextInput::make('nama_program')
-                            ->required(),
-                        Select::make('id_pegawai')
-                            ->label('Nama PIC')
-                            ->options(User::query()->pluck('nama', 'id_user'))
-                            ->searchable()
-                            ->preload()
-                            ->required(),
-                        Textarea::make('keterangan')->rows(3),
+                        Select::make('kategori')
+                    ->options([
+            'karyawan' => 'Karyawan',
+            'donatur' => 'Donatur',
+            'kreditur' => 'Kreditur',
+            'debitur' => 'Debitur',
+        ])
+                    ->default(null),
+                TextInput::make('nama')
+                    ->default(null),
+                TextInput::make('nomer_wa')
+                    ->default(null),
+                TextInput::make('email')
+                    ->label('Email address')
+                    ->email()
+                    ->required(),
+                TextInput::make('alamat')
+                    ->default(null),
+                Select::make('role')
+                    ->options([
+            'admin' => 'Admin',
+            'manager_keuangan' => 'Manager keuangan',
+            'staf_keuangan' => 'Staf keuangan',
+            'pegawai' => 'Pegawai',
+        ])
+                    ->default('pegawai')->default('admin123')
+                    ->required(),
+                TextInput::make('password')
+                    ->password()
+                    ->required(),
                     ])
                     ->columns(2),
             ])     
@@ -70,7 +90,7 @@ class ProgramKerja extends Page implements HasForms, HasTable
     public function create(): void
     {
         $data = $this->form->getState();
-        ProgramKerjaModel::create($data);
+        User::create($data);
         Notification::make()->title('Disimpan')->success()->send();
         $this->form->fill();
     }
@@ -78,19 +98,20 @@ class ProgramKerja extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(ProgramKerjaModel::query()->latest())
+            ->query(User::query()->latest())
             ->columns([
-                TextColumn::make('id_program_kerja')
-                    ->label('No')
-                    ->sortable(),
-                TextColumn::make('nama_program')
+                TextColumn::make('kategori'),
+                TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('pegawai.nama')
-                    ->label('PIC')
-                    ->sortable(),
-                TextColumn::make('keterangan'),
+                TextColumn::make('nomer_wa')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable(),
+                TextColumn::make('alamat')
+                    ->searchable(),
+                TextColumn::make('role'),
                 TextColumn::make('created_at')
-                    ->searchable()
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
