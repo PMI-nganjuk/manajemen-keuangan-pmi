@@ -17,7 +17,7 @@ class TransaksiKasPage extends Page implements HasTable
 
     protected string $view = 'filament.pages.transaksi-kas';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Banknotes;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
     protected static ?string $navigationLabel = 'Transaksi Kas';
     protected static ?string $title = 'Transaksi Kas';
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';

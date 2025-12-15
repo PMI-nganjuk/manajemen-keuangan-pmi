@@ -26,7 +26,7 @@ class Coa extends Page implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
     protected string $view = 'filament.pages.coa';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBox;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArchiveBox;
     protected static ?string $navigationLabel = 'Chart of Accounts (COA)';
     protected static ?string $title = 'Chart of Accounts (COA)';
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
