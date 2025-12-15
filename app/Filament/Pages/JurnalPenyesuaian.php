@@ -3,14 +3,23 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
+use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 
 use App\Models\Penyesuaian;
 use App\Models\Coa;
@@ -19,9 +28,10 @@ use App\Models\LaporanKeuangan;
 use UnitEnum;
 use BackedEnum;
 
-class JurnalPenyesuaian extends Page implements HasForms
+class JurnalPenyesuaian extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;
+    use InteractsWithTable;
 
     protected string $view = 'filament.pages.jurnal-penyesuaian';
 
@@ -30,18 +40,11 @@ class JurnalPenyesuaian extends Page implements HasForms
     protected static ?string $title = 'Jurnal Penyesuaian';
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
 
-    public ?array $data = [];
-    public ?Penyesuaian $penyesuaian;
+    public array $formData = [];
 
     public function mount(): void
     {
-        // Ambil entri pertama (atau buat objek kosong)
-        $this->penyesuaian = Penyesuaian::first() ?? new Penyesuaian();
-
-        // Isi form
-        $this->form->fill(
-            $this->penyesuaian->toArray()
-        );
+        $this->form->fill();
     }
 
     public function form(Schema $schema): Schema
@@ -65,25 +68,21 @@ class JurnalPenyesuaian extends Page implements HasForms
                 Section::make('Detail Transaksi')
                     ->schema([
                         TextInput::make('debit')
-                            ->label('Debit')
                             ->numeric()
                             ->required()
                             ->minValue(0),
 
                         TextInput::make('kredit')
-                            ->label('Kredit')
                             ->numeric()
                             ->required()
                             ->minValue(0),
 
                         TextInput::make('saldo_awal')
-                            ->label('Saldo Awal')
                             ->numeric()
                             ->required()
                             ->minValue(0),
 
-                        TextInput::make('keterangan')
-                            ->label('Keterangan'),
+                        TextInput::make('keterangan'),
                     ])
                     ->columns(4),
 
@@ -102,29 +101,48 @@ class JurnalPenyesuaian extends Page implements HasForms
                             ->required(),
 
                         Select::make('id_laporan')
-                            ->label('Laporan Keuangan (opsional)')
+                            ->label('Laporan Keuangan')
                             ->options(LaporanKeuangan::pluck('nama_laporan', 'id_laporan'))
-                            ->searchable(),
+                            ->searchable()
+                            ->nullable(),
                     ])
                     ->columns(3),
             ])
-            ->statePath('data');
+            ->statePath('formData');
     }
 
-    public function save(): void
+    public function createRecord(): void
     {
-        $validated = $this->form->getState();
+        Penyesuaian::create($this->formData);
 
-        if (!$this->penyesuaian->exists) {
-            $this->penyesuaian = Penyesuaian::create($validated);
-        } else {
-            $this->penyesuaian->update($validated);
-        }
+        $this->reset('formData');
+        $this->form->fill();
 
-        $this->dispatch(
-            'notify',
-            type: 'success',
-            message: 'Jurnal Penyesuaian berhasil disimpan!'
-        );
+        $this->notify('success', 'Jurnal Penyesuaian berhasil ditambahkan!');
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(Penyesuaian::query())
+            ->columns([
+                TextColumn::make('tanggal')->date(),
+                TextColumn::make('no_dokumen')->searchable(),
+                TextColumn::make('referensi')->searchable(),
+                TextColumn::make('debit')->numeric()->sortable(),
+                TextColumn::make('kredit')->numeric()->sortable(),
+                TextColumn::make('keterangan')->searchable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 }
