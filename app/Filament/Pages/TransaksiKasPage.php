@@ -17,7 +17,7 @@ class TransaksiKasPage extends Page implements HasTable
 
     protected string $view = 'filament.pages.transaksi-kas';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Banknotes;
     protected static ?string $navigationLabel = 'Transaksi Kas';
     protected static ?string $title = 'Transaksi Kas';
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
@@ -32,24 +32,40 @@ class TransaksiKasPage extends Page implements HasTable
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('no_dokumen')
+                    ->label('No Dokumen')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('referensi')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('rupiah')
+                    ->label('Jumlah (Rp)')
                     ->numeric()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('keterangan'),
+                Tables\Columns\TextColumn::make('keterangan')
+                    ->wrap(),
 
-                Tables\Columns\TextColumn::make('id_user'),
-                Tables\Columns\TextColumn::make('id_coa'),
-                Tables\Columns\TextColumn::make('id_program_kerja'),
-                Tables\Columns\TextColumn::make('id_laporan_keuangan'),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('User')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('coa.nama_akun')
+                    ->label('COA')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('programKerja.nama_program')
+                    ->label('Program Kerja')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('laporanKeuangan.nama_laporan')
+                    ->label('Laporan Keuangan')
+                    ->searchable(),
             ])
             ->defaultPaginationPageOption(10)
             ->emptyStateHeading('Tidak ada transaksi')
-            ->emptyStateDescription('Data transaksi kas diambil dari view sistem.');
+            ->emptyStateDescription(
+                'Data transaksi kas ditampilkan otomatis dari view sistem.'
+            );
     }
 }

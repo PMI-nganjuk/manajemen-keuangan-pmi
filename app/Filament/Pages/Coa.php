@@ -2,18 +2,17 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
 use App\Models\Coa as CoaModel;
+use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
@@ -26,7 +25,6 @@ class Coa extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
-
     protected string $view = 'filament.pages.coa';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBox;
     protected static ?string $navigationLabel = 'Chart of Accounts (COA)';
@@ -40,7 +38,6 @@ class Coa extends Page implements HasForms, HasTable
         $this->form->fill();
     }
 
-    // ================= FORM =================
     public function form(Schema $schema): Schema
     {
         return $schema
@@ -51,11 +48,15 @@ class Coa extends Page implements HasForms, HasTable
                             ->label('Kode Akun')
                             ->required()
                             ->maxLength(10)
-                            ->unique(
-                                table: CoaModel::class,
-                                column: 'id_coa',
-                                ignoreRecord: true
-                            ),
+                            ->unique(ignoreRecord: true),
+
+                        TextInput::make('kategori_1')
+                            ->label('Kategori 1')
+                            ->maxLength(100),
+
+                        TextInput::make('kategori_2')
+                            ->label('Kategori 2')
+                            ->maxLength(100),
 
                         TextInput::make('nama_akun')
                             ->label('Nama Akun')
@@ -74,7 +75,6 @@ class Coa extends Page implements HasForms, HasTable
             ->statePath('formData');
     }
 
-    // ================= CREATE =================
     public function createRecord(): void
     {
         CoaModel::create($this->formData);
@@ -85,7 +85,6 @@ class Coa extends Page implements HasForms, HasTable
         $this->notify('success', 'Data COA berhasil ditambahkan!');
     }
 
-    // ================= TABLE =================
     public function table(Table $table): Table
     {
         return $table
@@ -96,14 +95,23 @@ class Coa extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('kategori_1')
+                    ->label('Kategori 1')
+                    ->toggleable(),
+
+                TextColumn::make('kategori_2')
+                    ->label('Kategori 2')
+                    ->toggleable(),
+
                 TextColumn::make('nama_akun')
+                    ->label('Nama Akun')
                     ->searchable(),
 
                 TextColumn::make('pos_saldo')
-                    ->searchable(),
+                    ->label('Pos Saldo'),
 
                 TextColumn::make('pos_laporan')
-                    ->searchable(),
+                    ->label('Pos Laporan'),
 
                 TextColumn::make('created_at')
                     ->dateTime()

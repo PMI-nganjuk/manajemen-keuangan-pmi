@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Penyesuaian;
 use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
@@ -14,17 +15,11 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-
-use App\Models\Penyesuaian;
-use App\Models\Coa;
-use App\Models\ProgramKerja;
-use App\Models\LaporanKeuangan;
 use UnitEnum;
 use BackedEnum;
 
@@ -35,6 +30,8 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
 
     protected string $view = 'filament.pages.jurnal-penyesuaian';
 
+    // ✅ penting untuk routing Filament
+    protected static ?string $slug = 'jurnal-penyesuaian';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
     protected static ?string $navigationLabel = 'Jurnal Penyesuaian';
     protected static ?string $title = 'Jurnal Penyesuaian';
@@ -51,58 +48,56 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
     {
         return $schema
             ->schema([
-                Section::make('Informasi Dokumen')
+                Section::make('Form Jurnal Penyesuaian')
                     ->schema([
+                        // Informasi Dokumen
                         DatePicker::make('tanggal')
                             ->label('Tanggal')
                             ->required(),
 
                         TextInput::make('no_dokumen')
-                            ->label('No Dokumen'),
+                            ->label('No Dokumen')
+                            ->nullable(),
 
                         TextInput::make('referensi')
-                            ->label('Referensi'),
-                    ])
-                    ->columns(3),
+                            ->label('Referensi')
+                            ->nullable(),
 
-                Section::make('Detail Transaksi')
-                    ->schema([
+                        // Detail Transaksi
                         TextInput::make('debit')
                             ->numeric()
-                            ->required()
-                            ->minValue(0),
+                            ->minValue(0)
+                            ->required(),
 
                         TextInput::make('kredit')
                             ->numeric()
-                            ->required()
-                            ->minValue(0),
+                            ->minValue(0)
+                            ->required(),
 
                         TextInput::make('saldo_awal')
                             ->numeric()
-                            ->required()
-                            ->minValue(0),
+                            ->minValue(0)
+                            ->required(),
 
-                        TextInput::make('keterangan'),
-                    ])
-                    ->columns(4),
+                        TextInput::make('keterangan')
+                            ->nullable(),
 
-                Section::make('Relasi Sistem')
-                    ->schema([
+                        // Relasi Sistem
                         Select::make('id_coa')
                             ->label('COA')
-                            ->options(Coa::pluck('nama_coa', 'id_coa'))
+                            ->relationship('coa', 'nama_akun')
                             ->searchable()
                             ->required(),
 
                         Select::make('id_program_kerja')
                             ->label('Program Kerja')
-                            ->options(ProgramKerja::pluck('nama_program', 'id_program_kerja'))
+                            ->relationship('programKerja', 'nama_program')
                             ->searchable()
                             ->required(),
 
                         Select::make('id_laporan')
                             ->label('Laporan Keuangan')
-                            ->options(LaporanKeuangan::pluck('nama_laporan', 'id_laporan'))
+                            ->relationship('laporan', 'nama_laporan')
                             ->searchable()
                             ->nullable(),
                     ])
@@ -110,6 +105,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
             ])
             ->statePath('formData');
     }
+
 
     public function createRecord(): void
     {
@@ -127,11 +123,29 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
             ->query(Penyesuaian::query())
             ->columns([
                 TextColumn::make('tanggal')->date(),
-                TextColumn::make('no_dokumen')->searchable(),
-                TextColumn::make('referensi')->searchable(),
-                TextColumn::make('debit')->numeric()->sortable(),
-                TextColumn::make('kredit')->numeric()->sortable(),
-                TextColumn::make('keterangan')->searchable(),
+
+                TextColumn::make('no_dokumen')
+                    ->searchable(),
+
+                TextColumn::make('referensi')
+                    ->searchable(),
+
+                TextColumn::make('coa.nama_akun')
+                    ->label('COA')
+                    ->searchable(),
+
+                TextColumn::make('programKerja.nama_program')
+                    ->label('Program Kerja')
+                    ->searchable(),
+
+                TextColumn::make('debit')
+                    ->numeric()
+                    ->sortable(),
+
+                TextColumn::make('kredit')
+                    ->numeric()
+                    ->sortable(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),

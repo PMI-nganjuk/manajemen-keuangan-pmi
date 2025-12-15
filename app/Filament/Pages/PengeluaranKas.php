@@ -2,34 +2,42 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
 use App\Models\PengeluaranKas as PengeluaranKasModel;
-use Filament\Schemas\Schema;
+use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Support\Icons\Heroicon;
+use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Tables;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use UnitEnum;
+use BackedEnum;
 
 class PengeluaranKas extends Page implements HasForms, HasTable
 {
-    use Forms\Concerns\InteractsWithForms;
-    use Tables\Concerns\InteractsWithTable;
+    use InteractsWithForms;
+    use InteractsWithTable;
 
     protected string $view = 'filament.pages.pengeluaran-kas';
+
+    protected static ?string $slug = 'pengeluaran-kas';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowUpTray;
     protected static ?string $navigationLabel = 'Pengeluaran Kas';
     protected static ?string $title = 'Pengeluaran Kas';
-    protected static string | UnitEnum | null $navigationGroup = 'Keuangan';
+    protected static string|UnitEnum|null $navigationGroup = 'Keuangan';
 
-    public $formData = [];
+    public array $formData = [];
 
     public function mount(): void
     {
@@ -40,51 +48,51 @@ class PengeluaranKas extends Page implements HasForms, HasTable
     {
         return $schema
             ->schema([
-                Section::make('Informasi Dokumen')
+                Section::make('Form Pengeluaran Kas')
                     ->schema([
                         DatePicker::make('tanggal')
-                            ->label('Tanggal')
                             ->required(),
 
                         TextInput::make('no_dokumen')
-                            ->label('No Dokumen'),
+                            ->nullable(),
 
                         TextInput::make('referensi')
-                            ->label('Referensi'),
-                    ])
-                    ->columns(3),
+                            ->nullable(),
 
-                Section::make('Detail Transaksi')
-                    ->schema([
                         TextInput::make('rupiah')
                             ->label('Jumlah (Rupiah)')
                             ->numeric()
+                            ->minValue(1)
                             ->required(),
 
                         TextInput::make('keterangan')
-                            ->label('Keterangan'),
+                            ->nullable(),
+
+                        Select::make('id_user')
+                            ->label('User')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->required(),
+
+                        Select::make('id_coa')
+                            ->label('COA')
+                            ->relationship('coa', 'nama_akun')
+                            ->searchable()
+                            ->required(),
+
+                        Select::make('id_program_kerja')
+                            ->label('Program Kerja')
+                            ->relationship('programKerja', 'nama_program')
+                            ->searchable()
+                            ->required(),
+
+                        Select::make('id_laporan_keuangan')
+                            ->label('Laporan Keuangan')
+                            ->relationship('laporanKeuangan', 'nama_laporan')
+                            ->searchable()
+                            ->required(),
                     ])
-                    ->columns(2),
-
-                Section::make('Relasi Sistem')
-                    ->schema([
-                        TextInput::make('id_user')
-                            ->numeric()
-                            ->required(),
-
-                        TextInput::make('id_coa')
-                            ->numeric()
-                            ->required(),
-
-                        TextInput::make('id_program_kerja')
-                            ->numeric()
-                            ->required(),
-
-                        TextInput::make('id_laporan_keuangan')
-                            ->numeric()
-                            ->required(),
-                    ])
-                    ->columns(4),
+                    ->columns(3),
             ])
             ->statePath('formData');
     }
@@ -105,10 +113,23 @@ class PengeluaranKas extends Page implements HasForms, HasTable
             ->query(PengeluaranKasModel::query())
             ->columns([
                 TextColumn::make('tanggal')->date(),
+
                 TextColumn::make('no_dokumen')->searchable(),
+
                 TextColumn::make('referensi')->searchable(),
-                TextColumn::make('rupiah')->numeric()->sortable(),
-                TextColumn::make('keterangan')->searchable(),
+
+                TextColumn::make('coa.nama_akun')
+                    ->label('COA')
+                    ->searchable(),
+
+                TextColumn::make('programKerja.nama_program')
+                    ->label('Program Kerja')
+                    ->searchable(),
+
+                TextColumn::make('rupiah')
+                    ->numeric()
+                    ->sortable(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
