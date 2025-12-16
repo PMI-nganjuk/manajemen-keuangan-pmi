@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Penyesuaian;
+use Filament\Actions\DeleteAction;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 use Filament\Forms;
@@ -152,7 +153,8 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()->color('warning' ),
+                DeleteAction::make()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
