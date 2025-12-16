@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use filament\Notifications\Notification;
 use App\Models\PengeluaranKas as PengeluaranKasModel;
 use Filament\Pages\Page;
 use Filament\Forms;
@@ -104,7 +105,10 @@ class PengeluaranKas extends Page implements HasForms, HasTable
         $this->reset('formData');
         $this->form->fill();
 
-        $this->notify('success', 'Data Pengeluaran Kas berhasil ditambahkan!');
+        Notification::make()
+            ->title('Data kas keluar berhasil ditambahkan!')
+            ->success()
+            ->send();
     }
 
     public function table(Table $table): Table

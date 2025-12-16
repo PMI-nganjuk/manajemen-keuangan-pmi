@@ -6,6 +6,7 @@ use Filament\Support\Icons\Heroicon;
 use App\Models\PenerimaanKas as PenerimaanKasModel;
 use Filament\Pages\Page;
 use Filament\Forms;
+use Filament\Notifications\Notification;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -102,7 +103,10 @@ class PenerimaanKas extends Page implements HasForms, HasTable
         $this->reset('formData');
         $this->form->fill();
 
-        $this->notify('success', 'Data Penerimaan Kas berhasil ditambahkan!');
+        Notification::make()
+            ->title('Data kas masuk berhasil ditambahkan!')
+            ->success()
+            ->send();
     }
 
     public function table(Table $table): Table
