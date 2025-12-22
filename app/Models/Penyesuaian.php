@@ -33,19 +33,27 @@ class Penyesuaian extends Model
         return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
     }
 
-    // alias biar bisa dipanggil 'laporan' di controller
+    // n - 1 Program Kerja
     public function laporan()
     {
         return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
     }
 
+    // n - 1 Program Kerja
     public function programKerja()
     {
         return $this->belongsTo(ProgramKerja::class, 'id_program_kerja', 'id_program_kerja');
     }
 
+    // n - 1 Coa
     public function coa()
     {
         return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
+    }
+
+    // 1 - n GL
+    public function gl()
+    {
+        return $this->hasMany(Gl::class, 'id_penyesuaian', 'id_penyesuaian');
     }
 }

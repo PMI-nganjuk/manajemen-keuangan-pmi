@@ -9,7 +9,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 🔥 MATIKAN FK CHECK
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         $this->call([

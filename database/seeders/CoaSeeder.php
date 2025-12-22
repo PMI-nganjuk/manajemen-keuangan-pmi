@@ -10,7 +10,6 @@ class CoaSeeder extends Seeder
 {
     public function run(): void
     {
-        // Lebih aman dari truncate (tidak bentrok FK)
         DB::table('coa')->delete();
 
         Coa::insert([

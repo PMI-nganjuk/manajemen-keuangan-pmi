@@ -21,21 +21,27 @@ class LaporanKeuangan extends Model
         'saldo_akhir',
     ];
 
-    // Relationships
+    // 1 - n penyesuaian
     public function penyesuaian()
     {
         return $this->hasMany(Penyesuaian::class, 'id_laporan');
     }
 
-    // Relationships
+    //  1 - n pengeluaranKas
     public function pengeluaranKas()
     {
         return $this->hasMany(PengeluaranKas::class, 'id_laporan');
     }
 
-    // Relationships
+    //  1 - n penerimaanKas
     public function penerimaanKas()
     {
         return $this->hasMany(PenerimaanKas::class, 'id_laporan');
+    }
+
+    // 1 - n GL
+    public function gl()
+    {
+        return $this->hasMany(Gl::class, 'id_laporan', 'id_laporan');
     }
 }

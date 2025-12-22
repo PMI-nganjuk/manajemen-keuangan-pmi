@@ -10,7 +10,6 @@ class LaporanKeuanganSeeder extends Seeder
 {
     public function run(): void
     {
-        // disable foreign key checks to allow truncate when FK constraints exist
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         LaporanKeuangan::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');

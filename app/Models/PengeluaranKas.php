@@ -50,4 +50,11 @@ class PengeluaranKas extends Model
     {
         return $this->belongsTo(LaporanKeuangan::class, 'id_laporan_keuangan', 'id_laporan_keuangan');
     }
+
+    // 1 - n GL
+    public function gl()
+    {
+        return $this->hasMany(Gl::class, 'id_pengeluaran_kas', 'id_pengeluaran_kas');
+    }
+
 }

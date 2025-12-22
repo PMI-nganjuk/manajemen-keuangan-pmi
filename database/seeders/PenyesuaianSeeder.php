@@ -23,7 +23,8 @@ class PenyesuaianSeeder extends Seeder
             'kredit' => 0,
             'keterangan' => 'Penyesuaian akhir tahun',
             'saldo_awal' => 0,
-            // ensure these foreign key values exist in their respective tables
+
+            // Foreign keys
             'id_coa' => '4-100',
             'id_program_kerja' => 1,
             'id_laporan' => 1,

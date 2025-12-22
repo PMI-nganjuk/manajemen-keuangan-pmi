@@ -7,6 +7,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Pastikan view lama dihapus dulu (WAJIB)
+        DB::statement('DROP VIEW IF EXISTS view_transaksi_kas');
+
         DB::statement("
             CREATE VIEW view_transaksi_kas AS
             SELECT
