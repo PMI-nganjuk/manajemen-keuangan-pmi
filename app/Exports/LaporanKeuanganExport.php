@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use App\Exports\Sheets\UserExport;
 use App\Exports\Sheets\ProgramKerjaExport;
-use App\Exports\Sheets\PenerimaanKasSheet;
+use App\Exports\Sheets\PenerimaanKasExport;
 use App\Exports\Sheets\PengeluaranKasExport;
 use App\Exports\Sheets\PenyesuaianExport;
 use App\Exports\Sheets\ProfilPmiExport;
@@ -18,7 +18,7 @@ class LaporanKeuanganExport implements WithMultipleSheets
         return [
             new UserExport(),
             new ProgramKerjaExport(),
-            new PenerimaanKasSheet(),
+            new PenerimaanKasExport(),
             new PengeluaranKasExport(),
             new PenyesuaianExport(),
             new ProfilPmiExport(),

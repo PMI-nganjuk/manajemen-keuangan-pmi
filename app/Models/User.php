@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
+
+    // ================== ROLE ==================
+    public const ROLE_ADMIN            = 'admin';
+    public const ROLE_MANAGER_KEUANGAN = 'manager_keuangan';
+    public const ROLE_STAF_KEUANGAN    = 'staf_keuangan';
+    public const ROLE_PEGAWAI          = 'pegawai';
+
+    // ================== KATEGORI ==================
+    public const KATEGORI_KARYAWAN = 'karyawan';
+    public const KATEGORI_RELAWAN  = 'relawan';
+
     use HasFactory, Notifiable;
 
     protected $table = 'users';

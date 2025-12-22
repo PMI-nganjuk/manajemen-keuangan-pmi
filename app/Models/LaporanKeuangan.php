@@ -11,30 +11,31 @@ class LaporanKeuangan extends Model
 
     protected $table = 'laporan_keuangan';
     protected $primaryKey = 'id_laporan';
-    public $incrementing = true;
-    protected $keyType = 'int';
 
     protected $fillable = [
+        'periode',
+        'tahun',
+        'status',
         'kas_tahun1',
         'kas_tahun2',
         'saldo_akhir',
     ];
 
-    // 1 - n Penyesuaian
+    // Relationships
     public function penyesuaian()
     {
-        return $this->hasMany(Penyesuaian::class, 'id_laporan', 'id_laporan');
+        return $this->hasMany(Penyesuaian::class, 'id_laporan');
     }
 
-    // 1 - n PengeluaranKas
+    // Relationships
     public function pengeluaranKas()
     {
-        return $this->hasMany(PengeluaranKas::class, 'id_laporan', 'id_laporan');
+        return $this->hasMany(PengeluaranKas::class, 'id_laporan');
     }
 
-    // 1 - n PenerimaanKas
+    // Relationships
     public function penerimaanKas()
     {
-        return $this->hasMany(PenerimaanKas::class, 'id_laporan', 'id_laporan');
+        return $this->hasMany(PenerimaanKas::class, 'id_laporan');
     }
 }

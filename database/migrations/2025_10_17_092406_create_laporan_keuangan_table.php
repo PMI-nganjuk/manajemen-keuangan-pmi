@@ -12,6 +12,12 @@ return new class extends Migration
         if (!Schema::hasTable('laporan_keuangan')) {
             Schema::create('laporan_keuangan', function (Blueprint $table) {
                 $table->id('id_laporan');
+
+                // Add human-friendly columns used by seeders/models
+                $table->string('periode')->nullable();
+                $table->integer('tahun')->nullable();
+                $table->string('status')->default('draft');
+
                 $table->integer('kas_tahun1')->default(0);
                 $table->integer('kas_tahun2')->default(0);
                 $table->integer('saldo_akhir')->default(0);
@@ -48,9 +54,17 @@ return new class extends Migration
     {
         foreach (['penyesuaian', 'pengeluaran_kas', 'penerimaan_kas'] as $tableName) {
             if (Schema::hasTable($tableName) && Schema::hasColumn($tableName, 'id_laporan')) {
-                Schema::table($tableName, function (Blueprint $table) {
-                    $table->dropForeign([$table->getTable() . '_id_laporan_foreign' ?? 'id_laporan']);
-                    $table->dropColumn('id_laporan');
+                Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+                    // try to drop foreign key safely; ignore if constraint name differs or missing
+                    try {
+                        $table->dropForeign(['id_laporan']);
+                    } catch (\Throwable $e) {
+                        // ignore - constraint may not exist or have different name
+                    }
+                    // then drop the column if exists
+                    if (Schema::hasColumn($tableName, 'id_laporan')) {
+                        $table->dropColumn('id_laporan');
+                    }
                 });
             }
         }
