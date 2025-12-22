@@ -21,7 +21,6 @@ class LaporanKeuanganExport implements WithMultipleSheets
             new PenerimaanKasExport(),
             new PengeluaranKasExport(),
             new PenyesuaianExport(),
-            new LaporanKeuanganExport(),
             new ProfilPmiExport(),
             new CoaExport(),
         ];
