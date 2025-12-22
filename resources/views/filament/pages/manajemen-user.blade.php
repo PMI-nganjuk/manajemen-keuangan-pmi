@@ -3,7 +3,7 @@
         
         <x-filament::section>
             <x-slot name="heading">
-                Input Program Kerja
+                Input Akun Pengguna
             </x-slot>
 
             {{ $this->form }}

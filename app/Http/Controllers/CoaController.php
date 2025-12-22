@@ -25,19 +25,26 @@ class CoaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_coa' => 'required|string|unique:coa,id_coa',
-            'nama_akun' => 'required|string',
-            'pos_saldo' => 'required|string',
+            'id_coa'      => 'required|string|unique:coa,id_coa',
+            'kategori_1'  => 'nullable|string',
+            'kategori_2'  => 'nullable|string',
+            'nama_akun'   => 'required|string',
+            'pos_saldo'   => 'required|string',
             'pos_laporan' => 'required|string',
         ]);
 
         $data = Coa::create($request->only([
-            'id_coa', 'nama_akun', 'pos_saldo', 'pos_laporan'
+            'id_coa',
+            'kategori_1',
+            'kategori_2',
+            'nama_akun',
+            'pos_saldo',
+            'pos_laporan'
         ]));
 
         return response()->json([
             'message' => 'COA berhasil ditambahkan',
-            'data' => $data
+            'data'    => $data
         ]);
     }
 
@@ -52,7 +59,7 @@ class CoaController extends Controller
     {
         return response()->json([
             'message' => 'Form edit COA',
-            'data' => $coa
+            'data'    => $coa
         ]);
     }
 
@@ -60,18 +67,24 @@ class CoaController extends Controller
     public function update(Request $request, Coa $coa)
     {
         $request->validate([
-            'nama_akun' => 'sometimes|required|string',
-            'pos_saldo' => 'sometimes|required|string',
-            'pos_laporan' => 'sometimes|required|string',
+            'kategori_1'  => 'sometimes|string',
+            'kategori_2'  => 'sometimes|string',
+            'nama_akun'   => 'sometimes|string',
+            'pos_saldo'   => 'sometimes|string',
+            'pos_laporan' => 'sometimes|string',
         ]);
 
         $coa->update($request->only([
-            'nama_akun', 'pos_saldo', 'pos_laporan'
+            'kategori_1',
+            'kategori_2',
+            'nama_akun',
+            'pos_saldo',
+            'pos_laporan'
         ]));
 
         return response()->json([
             'message' => 'COA berhasil diupdate',
-            'data' => $coa
+            'data'    => $coa
         ]);
     }
 
@@ -101,6 +114,8 @@ class CoaController extends Controller
             Coa::updateOrCreate(
                 ['id_coa' => $row[0]],
                 [
+                    'kategori_1'  => $row[1] ?? null,
+                    'kategori_2'  => $row[2] ?? null,
                     'nama_akun'   => $row[3] ?? '',
                     'pos_saldo'   => $row[4] ?? '',
                     'pos_laporan' => $row[5] ?? '',
@@ -119,8 +134,8 @@ class CoaController extends Controller
         $data = Coa::all()->map(function ($item) {
             return [
                 'COA'         => $item->id_coa,
-                'Kategori 1'  => '',
-                'Kategori 2'  => '',
+                'Kategori 1'  => $item->kategori_1,
+                'Kategori 2'  => $item->kategori_2,
                 'Nama Akun'   => $item->nama_akun,
                 'Pos Saldo'   => $item->pos_saldo,
                 'Pos Laporan' => $item->pos_laporan,

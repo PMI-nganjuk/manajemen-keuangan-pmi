@@ -2,10 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Penyesuaian;
-use Filament\Actions\DeleteAction;
+use filament\Notifications\Notification;
+use App\Models\PengeluaranKas as PengeluaranKasModel;
 use Filament\Pages\Page;
-use Filament\Notifications\Notification;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
@@ -20,21 +19,25 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use UnitEnum;
 use BackedEnum;
 
-class JurnalPenyesuaian extends Page implements HasForms, HasTable
+class PengeluaranKas extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
 
-    protected string $view = 'filament.pages.jurnal-penyesuaian';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
-    protected static ?string $navigationLabel = 'Jurnal Penyesuaian';
-    protected static ?string $title = 'Jurnal Penyesuaian';
-    protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
+    protected string $view = 'filament.pages.pengeluaran-kas';
+
+    protected static ?string $slug = 'pengeluaran-kas';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowUpTray;
+    protected static ?string $navigationLabel = 'Pengeluaran Kas';
+    protected static ?string $title = 'Pengeluaran Kas';
+    protected static string|UnitEnum|null $navigationGroup = 'Keuangan';
 
     public array $formData = [];
 
@@ -47,41 +50,32 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
     {
         return $schema
             ->schema([
-                Section::make('Form Jurnal Penyesuaian')
+                Section::make('Form Pengeluaran Kas')
                     ->schema([
-                        // Informasi Dokumen
                         DatePicker::make('tanggal')
-                            ->label('Tanggal')
                             ->required(),
 
                         TextInput::make('no_dokumen')
-                            ->label('No Dokumen')
                             ->nullable(),
 
                         TextInput::make('referensi')
-                            ->label('Referensi')
                             ->nullable(),
 
-                        // Detail Transaksi
-                        TextInput::make('debit')
+                        TextInput::make('rupiah')
+                            ->label('Jumlah (Rupiah)')
                             ->numeric()
-                            ->minValue(0)
-                            ->required(),
-
-                        TextInput::make('kredit')
-                            ->numeric()
-                            ->minValue(0)
-                            ->required(),
-
-                        TextInput::make('saldo_awal')
-                            ->numeric()
-                            ->minValue(0)
+                            ->minValue(1)
                             ->required(),
 
                         TextInput::make('keterangan')
                             ->nullable(),
 
-                        // Relasi Sistem
+                        Select::make('id_user')
+                            ->label('User')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->required(),
+
                         Select::make('id_coa')
                             ->label('COA')
                             ->relationship('coa', 'nama_akun')
@@ -94,27 +88,26 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                             ->searchable()
                             ->required(),
 
-                        Select::make('id_laporan')
+                        Select::make('id_laporan_keuangan')
                             ->label('Laporan Keuangan')
-                            ->relationship('laporan', 'nama_laporan')
+                            ->relationship('laporanKeuangan', 'nama_laporan')
                             ->searchable()
-                            ->nullable(),
+                            ->required(),
                     ])
                     ->columns(3),
             ])
             ->statePath('formData');
     }
 
-
     public function createRecord(): void
     {
-        Penyesuaian::create($this->formData);
+        PengeluaranKasModel::create($this->formData);
 
         $this->reset('formData');
         $this->form->fill();
 
         Notification::make()
-            ->title('Data Penyesuaian berhasil ditambahkan!')
+            ->title('Data kas keluar berhasil ditambahkan!')
             ->success()
             ->send();
     }
@@ -122,15 +115,13 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Penyesuaian::query())
+            ->query(PengeluaranKasModel::query())
             ->columns([
                 TextColumn::make('tanggal')->date(),
 
-                TextColumn::make('no_dokumen')
-                    ->searchable(),
+                TextColumn::make('no_dokumen')->searchable(),
 
-                TextColumn::make('referensi')
-                    ->searchable(),
+                TextColumn::make('referensi')->searchable(),
 
                 TextColumn::make('coa.nama_akun')
                     ->label('COA')
@@ -140,11 +131,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                     ->label('Program Kerja')
                     ->searchable(),
 
-                TextColumn::make('debit')
-                    ->numeric()
-                    ->sortable(),
-
-                TextColumn::make('kredit')
+                TextColumn::make('rupiah')
                     ->numeric()
                     ->sortable(),
 
@@ -153,7 +140,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
-                EditAction::make()->color('warning' ),
+                EditAction::make()->color('warning'),
                 DeleteAction::make()
             ])
             ->toolbarActions([
