@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\PengeluaranKas;
 use Illuminate\Http\Request;
 
-// Controller untuk mengelola pengeluaran kas
 class PengeluaranKasController extends Controller
 {
     // Tampilkan daftar pengeluaran kas
@@ -15,7 +14,7 @@ class PengeluaranKasController extends Controller
         return response()->json($pengeluaran);
     }
 
-    // Simpan data pengeluaran kas
+    // Save data pengeluaran kas
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -31,12 +30,6 @@ class PengeluaranKasController extends Controller
             'message' => 'Data pengeluaran berhasil ditambahkan',
             'data' => $data
         ], 201);
-    }
-
-    public function show($id)
-    {
-        $pengeluaran = PengeluaranKas::findOrFail($id);
-        return response()->json($pengeluaran);
     }
 
     // Update data pengeluaran kas
@@ -58,12 +51,4 @@ class PengeluaranKasController extends Controller
         ]);
     }
 
-    // Hapus data pengeluaran kas
-    public function destroy($id)
-    {
-        $pengeluaran = PengeluaranKas::findOrFail($id);
-        $pengeluaran->delete();
-
-        return response()->json(['message' => 'Data pengeluaran berhasil dihapus']);
-    }
 }

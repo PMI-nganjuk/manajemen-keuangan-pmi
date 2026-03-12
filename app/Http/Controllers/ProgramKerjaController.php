@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class ProgramKerjaController extends Controller
 {
-    // Menampilkan semua program kerja.
+    // Show semua program kerja.
     public function index()
     {
         $programKerjas = ProgramKerja::with('kategori')->get();
         return response()->json($programKerjas);
     }
 
-    // Simpan program kerja baru.
+    // Save program kerja baru.
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -32,13 +32,6 @@ class ProgramKerjaController extends Controller
             'message' => 'Program kerja berhasil ditambahkan',
             'data' => $programKerja
         ], 201);
-    }
-
-    // Menampilkan detail program kerja berdasarkan ID.
-    public function show($id)
-    {
-        $programKerja = ProgramKerja::with('kategori')->findOrFail($id);
-        return response()->json($programKerja);
     }
 
     // Update program kerja.
@@ -61,14 +54,5 @@ class ProgramKerjaController extends Controller
             'message' => 'Program kerja berhasil diperbarui',
             'data' => $programKerja
         ]);
-    }
-
-    // Hapus program kerja.
-    public function destroy($id)
-    {
-        $programKerja = ProgramKerja::findOrFail($id);
-        $programKerja->delete();
-
-        return response()->json(['message' => 'Program kerja berhasil dihapus']);
     }
 }

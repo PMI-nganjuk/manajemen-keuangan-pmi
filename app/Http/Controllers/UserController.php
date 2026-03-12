@@ -3,136 +3,116 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    // Menampilkan daftar (listing) semua pengguna (users).
-     /*
-     * @return \Illuminate\View\View
+    /**
+     * Show daftar user
      */
-    public function index()
+    public function index(): View
     {
-        $users = User::all();
+        $users = User::query()->latest()->get();
 
-        return view('users.index', compact('users'));
+        return view('users.index', [
+            'users' => $users
+        ]);
     }
 
-    //Menampilkan form untuk membuat pengguna baru.
-     /*
-     * @return \Illuminate\View\View
+    /**
+     * Show form create user
      */
-    public function create()
+    public function create(): View
     {
         return view('users.create');
     }
 
-    //Menyimpan data pengguna baru yang dibuat ke database.
-     /*
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+    /**
+     * Save user baru
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
             'password'  => 'required|min:6',
-            'role'      => 'required|in:' . implode(',', User::getRoles()),
+            'role'      => ['required', Rule::in(User::getRoles())],
             'kategori'  => ['nullable', Rule::in(User::getKategori())],
             'nomer_wa'  => 'nullable|string|max:20',
             'alamat'    => 'nullable|string',
         ]);
 
-        User::create([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-            'kategori' => $request->kategori,
-            'nomer_wa' => $request->nomer_wa,
-            'alamat'   => $request->alamat,
+        $validated['password'] = Hash::make($validated['password']);
+
+        User::query()->create($validated);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit user
+     */
+    public function edit(User $user): View
+    {
+        return view('users.edit', [
+            'user' => $user
         ]);
-
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
-     // Menampilkan form untuk mengedit pengguna yang ditentukan.
-     // Menggunakan Route Model Binding untuk resolusi otomatis User.
-     /*
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\View\View
+    /**
+     * Update user
      */
-    public function edit(User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
-        return view('users.edit', compact('user'));
-    }
-
-    // Memperbarui (update) data pengguna yang ditentukan di database.
-    /*
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, User $user)
-    {
-        $rules = [
+        $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'      => 'required|in:' . implode(',', User::getRoles()),
+            'role'      => ['required', Rule::in(User::getRoles())],
             'kategori'  => ['nullable', Rule::in(User::getKategori())],
             'nomer_wa'  => 'nullable|string|max:20',
             'alamat'    => 'nullable|string',
-        ];
-
-        if ($request->filled('password')) {
-            $rules['password'] = 'min:6';
-        }
-
-        $request->validate($rules);
-
-        $user->update([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
-            'role'     => $request->role,
-            'kategori' => $request->kategori,
-            'nomer_wa' => $request->nomer_wa,
-            'alamat'   => $request->alamat,
+            'password'  => 'nullable|min:6',
         ]);
 
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password)
-            ]);
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
         }
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+        $user->update($validated);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User berhasil diperbarui.');
     }
 
-    // Menghapus pengguna yang ditentukan dari database.
-     /*
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\RedirectResponse
+    /**
+     * Hapus user
      */
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User berhasil dihapus.');
     }
 
-    // test controller
-     /*
-     * @return \Illuminate\Http\JsonResponse
+    /**
+     * Test controller
      */
     public function test()
     {
         return response()->json([
             'status' => 'success',
-            'message' => 'Controller berjalan dengan baik',
+            'message' => 'Controller berjalan dengan baik'
         ]);
     }
-
 }

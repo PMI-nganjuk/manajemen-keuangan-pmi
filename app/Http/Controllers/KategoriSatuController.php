@@ -7,21 +7,14 @@ use Illuminate\Http\Request;
 
 class KategoriSatuController extends Controller
 {
-    // Tampilkan semua kategori satu beserta kategori dua terkait
+    // Show all kategori satu beserta kategori dua terkait
     public function index()
     {
         $kategoriSatu = KategoriSatu::with('kategoriDua')->get();
         return response()->json($kategoriSatu);
     }
 
-    // Tampilkan detail kategori satu berdasarkan ID
-    public function show($id)
-    {
-        $kategori = KategoriSatu::with('kategoriDua')->findOrFail($id);
-        return response()->json($kategori);
-    }
-
-    // Simpan kategori satu baru
+    // Save kategori satu baru
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,14 +38,5 @@ class KategoriSatuController extends Controller
         $kategori->update($validated);
 
         return response()->json(['message' => 'Kategori satu berhasil diperbarui.', 'data' => $kategori]);
-    }
-
-    // Hapus kategori satu
-    public function destroy($id)
-    {
-        $kategori = KategoriSatu::findOrFail($id);
-        $kategori->delete();
-
-        return response()->json(['message' => 'Kategori satu berhasil dihapus.']);
     }
 }

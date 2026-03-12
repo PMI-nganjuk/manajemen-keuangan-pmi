@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Penyesuaian;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\FromCollection;
 
 class PenyesuaianController extends Controller
 {
@@ -17,11 +15,13 @@ class PenyesuaianController extends Controller
         );
     }
 
+    // Form create Penyesuaian
     public function create()
     {
         return response()->json(['message' => 'Form create Penyesuaian']);
     }
 
+    // Store Penyesuaian
     public function store(Request $request)
     {
         $request->validate([
@@ -45,13 +45,7 @@ class PenyesuaianController extends Controller
         ]);
     }
 
-    public function show(Penyesuaian $penyesuaian)
-    {
-        return response()->json(
-            $penyesuaian->load(['coa', 'laporan'])
-        );
-    }
-
+    // Edit form Penyesuaian
     public function edit(Penyesuaian $penyesuaian)
     {
         return response()->json([
@@ -60,6 +54,7 @@ class PenyesuaianController extends Controller
         ]);
     }
 
+    // Update Penyesuaian
     public function update(Request $request, Penyesuaian $penyesuaian)
     {
         $request->validate([
@@ -81,70 +76,5 @@ class PenyesuaianController extends Controller
             'message' => 'Penyesuaian berhasil diperbarui',
             'data' => $penyesuaian
         ]);
-    }
-
-    public function destroy(Penyesuaian $penyesuaian)
-    {
-        $penyesuaian->delete();
-        return response()->json([
-            'message' => 'Penyesuaian berhasil dihapus'
-        ]);
-    }
-
-    // IMPORT PENYESUAIAN
-    public function importExcel(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls'
-        ]);
-
-        $rows = Excel::toArray([], $request->file('file'))[0];
-
-        foreach ($rows as $i => $row) {
-            if ($i == 0) continue; // skip header
-
-            Penyesuaian::create([
-                'tanggal'          => $row[1],
-                'no_dokumen'       => $row[2],
-                'id_program_kerja' => $row[3],
-                'referensi'        => $row[4],
-                'id_coa'           => $row[5],
-                'debit'            => $row[6],
-                'kredit'           => $row[7],
-                'keterangan'       => $row[8],
-                'saldo_awal'       => $row[9],
-            ]);
-        }
-
-        return response()->json(['message' => 'Import penyesuaian berhasil']);
-    }
-
-    public function exportExcel()
-    {
-        $data = Penyesuaian::with(['coa', 'laporan'])
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'Tanggal'        => $item->tanggal,
-                    'No Dokumen'     => $item->no_dokumen,
-                    'Program Kerja'  => $item->id_program_kerja,
-                    'Referensi'      => $item->referensi,
-                    'COA Transaksi'  => $item->id_coa,
-                    'Debit'          => $item->debit,
-                    'Kredit'         => $item->kredit,
-                    'Keterangan'     => $item->keterangan,
-                    'Saldo Awal'     => $item->saldo_awal,
-                    'ID Laporan'     => $item->id_laporan,
-                ];
-            });
-
-        // Anonymous class — no extra file created
-        $export = new class($data) implements FromCollection {
-            protected $data;
-            public function __construct($data) { $this->data = $data; }
-            public function collection() { return $this->data; }
-        };
-
-        return Excel::download($export, 'Penyesuaian.xlsx');
     }
 }

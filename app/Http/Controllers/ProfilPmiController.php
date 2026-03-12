@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfilPmiController extends Controller
 {
-    // Menampilkan profil PMI
+    // Show profil PMI
     public function index()
     {
         $profil = ProfilPmi::first();
         return view('profil_pmi.index', compact('profil'));
     }
 
-    // Menampilkan form edit profil PMI
+    // Show form edit profil PMI
     public function edit()
     {
         $profil = ProfilPmi::first();

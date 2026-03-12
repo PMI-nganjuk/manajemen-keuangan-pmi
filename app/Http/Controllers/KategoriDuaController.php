@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\KategoriDua;
-use App\Models\KategoriSatu;
 use Illuminate\Http\Request;
 
 class KategoriDuaController extends Controller
@@ -13,13 +12,6 @@ class KategoriDuaController extends Controller
     {
         $kategoriDua = KategoriDua::with('kategoriSatu')->get();
         return response()->json($kategoriDua);
-    }
-
-    // Tampilkan detail kategori dua berdasarkan ID
-    public function show($id)
-    {
-        $kategori = KategoriDua::with('kategoriSatu')->findOrFail($id);
-        return response()->json($kategori);
     }
 
     // Simpan kategori dua baru
@@ -47,14 +39,5 @@ class KategoriDuaController extends Controller
         $kategori->update($validated);
 
         return response()->json(['message' => 'Kategori dua berhasil diperbarui.', 'data' => $kategori]);
-    }
-
-    // Hapus kategori dua
-    public function destroy($id)
-    {
-        $kategori = KategoriDua::findOrFail($id);
-        $kategori->delete();
-
-        return response()->json(['message' => 'Kategori dua berhasil dihapus.']);
     }
 }

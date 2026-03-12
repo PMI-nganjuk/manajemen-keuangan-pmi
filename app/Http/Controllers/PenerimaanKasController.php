@@ -32,7 +32,7 @@ class PenerimaanKasController extends Controller
         ], 201);
     }
 
-    // Tampilkan detail penerimaan kas berdasarkan ID
+    // Show detail penerimaan kas berdasarkan ID
     public function show($id)
     {
         $penerimaan = PenerimaanKas::findOrFail($id);
@@ -56,14 +56,5 @@ class PenerimaanKasController extends Controller
             'message' => 'Data penerimaan berhasil diperbarui',
             'data' => $penerimaan
         ]);
-    }
-
-    // Hapus data penerimaan kas
-    public function destroy($id)
-    {
-        $penerimaan = PenerimaanKas::findOrFail($id);
-        $penerimaan->delete();
-
-        return response()->json(['message' => 'Data penerimaan berhasil dihapus']);
     }
 }
