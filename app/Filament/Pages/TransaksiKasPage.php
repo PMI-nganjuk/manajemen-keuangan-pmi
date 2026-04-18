@@ -58,7 +58,7 @@ class TransaksiKasPage extends Page implements HasTable
                     ->label('Program Kerja')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('laporanKeuangan.nama_laporan')
+                Tables\Columns\TextColumn::make('laporanKeuangan.periode')
                     ->label('Laporan Keuangan')
                     ->searchable(),
             ])

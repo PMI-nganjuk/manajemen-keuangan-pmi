@@ -32,6 +32,6 @@ class TransaksiKas extends Model
     // n - 1 Laporan Keuangan
     public function laporanKeuangan()
     {
-        return $this->belongsTo(LaporanKeuangan::class, 'id_laporan_keuangan', 'id_laporan_keuangan');
+        return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
     }
 }

@@ -96,7 +96,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
 
                         Select::make('id_laporan')
                             ->label('Laporan Keuangan')
-                            ->relationship('laporan', 'nama_laporan')
+                            ->relationship('laporanKeuangan', 'periode')
                             ->searchable()
                             ->nullable(),
                     ])

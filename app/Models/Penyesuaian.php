@@ -33,11 +33,7 @@ class Penyesuaian extends Model
         return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
     }
 
-    // n - 1 Program Kerja
-    public function laporan()
-    {
-        return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
-    }
+
 
     // n - 1 Program Kerja
     public function programKerja()

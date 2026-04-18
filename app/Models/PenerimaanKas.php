@@ -23,7 +23,7 @@ class PenerimaanKas extends Model
         'id_user',
         'id_coa',
         'id_program_kerja',
-        'id_laporan_keuangan',
+        'id_laporan',
     ];
 
 
@@ -48,7 +48,7 @@ class PenerimaanKas extends Model
     // n - 1 Laporan Keuangan
     public function laporanKeuangan()
     {
-        return $this->belongsTo(LaporanKeuangan::class, 'id_laporan_keuangan', 'id_laporan_keuangan');
+        return $this->belongsTo(LaporanKeuangan::class, 'id_laporan', 'id_laporan');
     }
 
     // 1 - n GL

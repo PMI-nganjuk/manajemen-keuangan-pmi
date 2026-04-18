@@ -88,9 +88,9 @@ class PengeluaranKas extends Page implements HasForms, HasTable
                             ->searchable()
                             ->required(),
 
-                        Select::make('id_laporan_keuangan')
+                        Select::make('id_laporan')
                             ->label('Laporan Keuangan')
-                            ->relationship('laporanKeuangan', 'nama_laporan')
+                            ->relationship('laporanKeuangan', 'periode')
                             ->searchable()
                             ->required(),
                     ])
