@@ -34,8 +34,10 @@ class ProfilPmiExport implements WithTitle, WithEvents
                         'nama_pmi' => '-',
                         'alamat' => '-',
                         'ketua' => '-',
+                        'kepala_markas' => '-',
+                        'kepala_uud' => '-',
                         'bendahara_markas' => '-',
-                        'kepala_udd' => '-',
+                        'bendahara_uud' => '-',
                         'periode_buku_awal' => '-',
                         'periode_buku_akhir' => '-',
                         'tahun_buku' => '-',
@@ -69,11 +71,13 @@ class ProfilPmiExport implements WithTitle, WithEvents
                     7  => ['Nama Entitas', $data->nama_pmi],
                     8  => ['Alamat', $data->alamat],
                     9  => ['Ketua', $data->ketua],
-                    10 => ['Bendahara Markas', $data->bendahara_markas],
-                    11 => ['Bendahara UDD', $data->kepala_udd],
-                    13 => ['Periode Buku Awal', $data->periode_buku_awal],
-                    14 => ['Periode Buku Akhir', $data->periode_buku_akhir],
-                    15 => ['Tahun Buku', $data->tahun_buku],
+                    10 => ['Kepala Markas', $data->kepala_markas],
+                    11 => ['Kepala UUD', $data->kepala_uud],
+                    12 => ['Bendahara Markas', $data->bendahara_markas],
+                    13 => ['Bendahara UUD', $data->bendahara_uud],
+                    15 => ['Periode Buku Awal', $data->periode_buku_awal],
+                    16 => ['Periode Buku Akhir', $data->periode_buku_akhir],
+                    17 => ['Tahun Buku', $data->tahun_buku],
                 ];
 
 
@@ -98,8 +102,8 @@ class ProfilPmiExport implements WithTitle, WithEvents
                 $sheet->getColumnDimension('D')->setWidth(45);
 
                 /** ============ ALIGNMENT ============ */
-                $sheet->getStyle('A7:A15')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
-                $sheet->getStyle('C7:C15')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A7:A17')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                $sheet->getStyle('C7:C17')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             }
         ];
     }

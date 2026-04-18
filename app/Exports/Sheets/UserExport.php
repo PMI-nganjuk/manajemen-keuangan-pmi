@@ -24,8 +24,8 @@ class UserExport implements FromCollection, WithHeadings, WithTitle, WithStyles,
             return [
                 $index + 1,
                 $item->kategori ?? '-',
-                $item->name,
-                $item->phone,
+                $item->nama,
+                $item->nomer_wa,
                 $item->email,
                 $item->alamat ?? '-',
             ];

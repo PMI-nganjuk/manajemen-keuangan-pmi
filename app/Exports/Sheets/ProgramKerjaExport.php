@@ -22,11 +22,11 @@ class ProgramKerjaExport implements FromCollection, WithTitle, WithHeadings, Wit
 {
     public function collection()
     {
-        return ProgramKerja::all()->map(function ($item, $index) {
+        return ProgramKerja::with('pegawai')->get()->map(function ($item, $index) {
             return [
                 $index + 1,
                 $item->nama_program,
-                $item->pic,
+                $item->pegawai->nama ?? '-',
                 $item->keterangan,
             ];
         });

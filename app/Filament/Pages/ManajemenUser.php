@@ -76,7 +76,7 @@ class ManajemenUser extends Page implements HasForms, HasTable
             'staf_keuangan' => 'Staf keuangan',
             'pegawai' => 'Pegawai',
         ])
-                    ->default('pegawai')->default('admin123')
+                    ->default('pegawai')
                     ->required(),
                 TextInput::make('password')
                     ->password()

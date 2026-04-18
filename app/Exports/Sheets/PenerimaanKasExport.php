@@ -28,16 +28,16 @@ class PenerimaanKasExport implements FromCollection, WithHeadings, WithStyles, W
 
     public function collection()
     {
-        return PenerimaanKas::all()->map(function ($item, $index) {
+        return PenerimaanKas::with(['programKerja', 'coa'])->get()->map(function ($item, $index) {
             return [
                 $index + 1,
                 $item->tanggal,
-                $item->program_kerja,
-                $item->no_document,
-                $item->terima_dari,
+                $item->programKerja->nama_program ?? '-',
+                $item->no_dokumen,
+                '-',
                 $item->referensi,
-                $item->rekening_kas,
-                $item->kode_transaksi,
+                $item->coa->nama_akun ?? '-',
+                $item->coa->id_coa ?? '-',
                 $item->rupiah,
                 $item->keterangan,
             ];

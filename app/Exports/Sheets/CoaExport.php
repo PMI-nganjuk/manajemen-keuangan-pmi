@@ -25,7 +25,7 @@ class CoaExport implements FromCollection, WithTitle, WithHeadings, WithStyles, 
         return Coa::all()->map(function ($item, $index) {
             return [
                 $index + 1,
-                $item->kode_coa,
+                $item->id_coa,
                 $item->kategori_1,
                 $item->kategori_2,
                 $item->nama_akun,

@@ -25,6 +25,12 @@
                             Download PDF
                         </x-filament::button>
 
+                        <a href="/export/laporan-keuangan" target="_blank">
+                            <x-filament::button type="button" color="success" icon="heroicon-o-table-cells">
+                                Export Excel
+                            </x-filament::button>
+                        </a>
+
                         <span style="font-size: 13px; color: #6b7280;">
                             Tahun aktif: {{ $tahun ?? '-' }}
                         </span>

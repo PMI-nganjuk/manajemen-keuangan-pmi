@@ -23,14 +23,14 @@ class PenyesuaianExport implements FromCollection, WithTitle, WithHeadings, With
 {
     public function collection()
     {
-        return Penyesuaian::all()->map(function ($item, $index) {
+        return Penyesuaian::with(['programKerja', 'coa'])->get()->map(function ($item, $index) {
             return [
                 $index + 1,
                 $item->tanggal,
-                $item->no_document,
-                $item->program_kerja,
+                $item->no_dokumen,
+                $item->programKerja->nama_program ?? '-',
                 $item->referensi,
-                $item->coa_transaksi,
+                $item->coa->nama_akun ?? '-',
                 $item->debit,
                 $item->kredit,
                 $item->keterangan,

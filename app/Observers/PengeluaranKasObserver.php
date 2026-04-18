@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Gl;
 use App\Models\PengeluaranKas;
 
 class PengeluaranKasObserver
@@ -56,34 +57,31 @@ class PengeluaranKasObserver
             'tanggal'            => $data->tanggal,
             'no_dokumen'         => $data->no_dokumen,
             'keterangan'         => $data->keterangan,
-            'id_pengeluaran_kas' => $data->id_pengeluaran_kas,
-            
-            // Akun Beban
-            'id_coa'             => $data->id_coa, 
-            'debit'              => $data->nominal, // Masuk Debit
+            'id_pengeluaran_kas' => $data->id_pengeluaran,
+            'id_coa'             => $data->id_coa,
+            'id_program_kerja'   => $data->id_program_kerja,
+            'id_laporan'         => $data->id_laporan,
+            'debit'              => $data->rupiah,
             'kredit'             => 0,
-            
-            // Field pelengkap
-            'rupiah'             => $data->nominal,
-            'rekening_kas'       => $data->nama_bank_tujuan, // Opsional, sekedar info string
+            'rupiah'             => $data->rupiah,
         ]);
 
         // ENTRY 2: KREDIT (Akun Kas/Bank - Sumber Dana)
-        // Pastikan Anda punya ID COA untuk Kas yang digunakan (misal field: id_sumber_dana)
+        // TODO: Idealnya entry kredit menggunakan COA kas/bank yang berbeda
+        //       dari COA beban di atas. Saat ini tabel pengeluaran_kas hanya
+        //       menyimpan 1 id_coa. Jika perlu double-entry yang benar,
+        //       tambahkan kolom 'id_coa_kas' di tabel pengeluaran_kas.
         Gl::create([
             'tanggal'            => $data->tanggal,
             'no_dokumen'         => $data->no_dokumen,
             'keterangan'         => 'Pembayaran: ' . $data->keterangan,
-            'id_pengeluaran_kas' => $data->id_pengeluaran_kas,
-            
-            // Akun Kas (Kredit karena uang keluar)
-            'id_coa'             => $data->id_sumber_dana, // Ganti dengan field yg sesuai di tabel Anda (misal: id_kas)
+            'id_pengeluaran_kas' => $data->id_pengeluaran,
+            'id_coa'             => $data->id_coa,
+            'id_program_kerja'   => $data->id_program_kerja,
+            'id_laporan'         => $data->id_laporan,
             'debit'              => 0,
-            'kredit'             => $data->nominal, // Masuk Kredit
-            
-            // Field pelengkap
-            'rupiah'             => $data->nominal,
-            'rekening_kas'       => $data->nama_bank_tujuan,
+            'kredit'             => $data->rupiah,
+            'rupiah'             => $data->rupiah,
         ]);
     }
 }
