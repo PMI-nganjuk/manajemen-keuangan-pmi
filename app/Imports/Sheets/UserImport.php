@@ -18,8 +18,12 @@ class UserImport implements OnEachRow, WithHeadingRow
         User::updateOrCreate(
             ['email' => $r['email']],
             [
-                'name' => $r['name'] ?? null,
-                'role' => $r['role'] ?? null,
+                'nama' => $r['nama'] ?? null,
+                'nomer_wa' => $r['nomer_wa'] ?? null,
+                'alamat' => $r['alamat'] ?? null,
+                'kategori' => $r['kategori'] ?? null,
+                'role' => $r['role'] ?? 'pegawai',
+                'password' => $r['password'] ?? 'password',
             ]
         );
     }

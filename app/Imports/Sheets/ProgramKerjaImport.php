@@ -13,13 +13,10 @@ class ProgramKerjaImport implements OnEachRow, WithHeadingRow
     {
         $r = $row->toArray();
 
-        ProgramKerja::updateOrCreate(
-            ['kode' => $r['kode'] ?? null],
-            [
-                'nama_program' => $r['nama_program'] ?? null,
-                'anggaran' => $r['anggaran'] ?? 0,
-                'keterangan' => $r['keterangan'] ?? null,
-            ]
-        );
+        ProgramKerja::create([
+            'nama_program' => $r['nama_program'] ?? null,
+            'keterangan' => $r['keterangan'] ?? null,
+            'id_pegawai' => $r['id_pegawai'] ?? null,
+        ]);
     }
 }

@@ -15,9 +15,11 @@ class PenyesuaianImport implements OnEachRow, WithHeadingRow
 
         Penyesuaian::create([
             'tanggal' => $r['tanggal'] ?? null,
-            'akun' => $r['akun'] ?? null,
+            'no_dokumen' => $r['no_dokumen'] ?? null,
+            'referensi' => $r['referensi'] ?? null,
             'debit' => $r['debit'] ?? 0,
             'kredit' => $r['kredit'] ?? 0,
+            'saldo_awal' => $r['saldo_awal'] ?? 0,
             'keterangan' => $r['keterangan'] ?? null,
         ]);
     }

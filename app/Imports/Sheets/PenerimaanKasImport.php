@@ -15,8 +15,9 @@ class PenerimaanKasImport implements OnEachRow, WithHeadingRow
 
         PenerimaanKas::create([
             'tanggal' => $r['tanggal'] ?? null,
-            'nominal' => $r['nominal'] ?? 0,
-            'sumber' => $r['sumber'] ?? null,
+            'no_dokumen' => $r['no_dokumen'] ?? null,
+            'referensi' => $r['referensi'] ?? null,
+            'rupiah' => $r['rupiah'] ?? 0,
             'keterangan' => $r['keterangan'] ?? null,
         ]);
     }
