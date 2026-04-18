@@ -89,10 +89,25 @@ class ManajemenUser extends Page implements HasForms, HasTable
 
     public function create(): void
     {
-        $data = $this->form->getState();
-        User::create($data);
-        Notification::make()->title('Disimpan')->success()->send();
-        $this->form->fill();
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $data = $this->form->getState();
+            User::create($data);
+            
+            \Illuminate\Support\Facades\DB::commit();
+
+            Notification::make()->title('Disimpan')->success()->send();
+            $this->form->fill();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('User Error: ' . $e->getMessage());
+
+            Notification::make()
+                ->title('Gagal menyimpan data!')
+                ->body('Terjadi kesalahan: Email mungkin sudah terpakai.')
+                ->danger()
+                ->send();
+        }
     }
 
     public function table(Table $table): Table

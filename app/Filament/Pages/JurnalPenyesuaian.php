@@ -108,15 +108,29 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
 
     public function createRecord(): void
     {
-        Penyesuaian::create($this->formData);
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            Penyesuaian::create($this->formData);
 
-        $this->reset('formData');
-        $this->form->fill();
+            \Illuminate\Support\Facades\DB::commit();
 
-        Notification::make()
-            ->title('Data Penyesuaian berhasil ditambahkan!')
-            ->success()
-            ->send();
+            $this->reset('formData');
+            $this->form->fill();
+
+            Notification::make()
+                ->title('Data Penyesuaian berhasil ditambahkan!')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Jurnal Penyesuaian Error: ' . $e->getMessage());
+
+            Notification::make()
+                ->title('Gagal menyimpan data!')
+                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
     public function table(Table $table): Table

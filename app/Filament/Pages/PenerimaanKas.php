@@ -99,15 +99,29 @@ class PenerimaanKas extends Page implements HasForms, HasTable
 
     public function createRecord(): void
     {
-        PenerimaanKasModel::create($this->formData);
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            PenerimaanKasModel::create($this->formData);
+            
+            \Illuminate\Support\Facades\DB::commit();
 
-        $this->reset('formData');
-        $this->form->fill();
+            $this->reset('formData');
+            $this->form->fill();
 
-        Notification::make()
-            ->title('Data kas masuk berhasil ditambahkan!')
-            ->success()
-            ->send();
+            Notification::make()
+                ->title('Data kas masuk berhasil ditambahkan!')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Penerimaan Kas Error: ' . $e->getMessage());
+
+            Notification::make()
+                ->title('Gagal menyimpan data!')
+                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
     public function table(Table $table): Table

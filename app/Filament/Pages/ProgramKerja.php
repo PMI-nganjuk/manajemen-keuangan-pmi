@@ -69,10 +69,25 @@ class ProgramKerja extends Page implements HasForms, HasTable
 
     public function create(): void
     {
-        $data = $this->form->getState();
-        ProgramKerjaModel::create($data);
-        Notification::make()->title('Disimpan')->success()->send();
-        $this->form->fill();
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $data = $this->form->getState();
+            ProgramKerjaModel::create($data);
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            Notification::make()->title('Disimpan')->success()->send();
+            $this->form->fill();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Program Kerja Error: ' . $e->getMessage());
+
+            Notification::make()
+                ->title('Gagal menyimpan data!')
+                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
     public function table(Table $table): Table
