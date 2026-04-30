@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\RoleEnum;
 
 return new class extends Migration
 {
@@ -19,7 +20,7 @@ return new class extends Migration
                 $table->string('nomer_wa')->nullable();
                 $table->string('email')->unique();
                 $table->string('alamat')->nullable();
-                $table->enum('role', ['admin', 'manager_keuangan', 'staf_keuangan', 'pegawai'])->default('pegawai');
+                $table->enum('role', array_column(RoleEnum::cases(), 'value'))->default(RoleEnum::STAFF);
 
                 $table->string('password');
                 $table->rememberToken();
