@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Enums\RoleEnum;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -16,7 +17,7 @@ class UserSeeder extends Seeder
             'nama' => 'Admin Utama',
             'email' => 'admin@example.com',
             'password' => Hash::make('admin123'),
-            'role' => User::ROLE_ADMIN,
+            'role' => RoleEnum::ADMIN,
             'kategori' => User::KATEGORI_KARYAWAN,
             'nomer_wa' => '081234567890',
             'alamat' => 'Kantor PMI',
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
             'nama' => 'Manager Keuangan',
             'email' => 'manager@example.com',
             'password' => Hash::make('manager123'),
-            'role' => User::ROLE_MANAGER_KEUANGAN,
+            'role' => RoleEnum::FINANCIAL_MANAGER,
             'kategori' => User::KATEGORI_KARYAWAN,
             'nomer_wa' => '081298765432',
             'alamat' => 'PMI Cabang',
@@ -36,7 +37,7 @@ class UserSeeder extends Seeder
             'nama' => 'Staf Keuangan',
             'email' => 'staf@example.com',
             'password' => Hash::make('staf123'),
-            'role' => User::ROLE_STAF_KEUANGAN,
+            'role' => RoleEnum::FINANCE_STAFF,
             'kategori' => User::KATEGORI_KARYAWAN,
             'nomer_wa' => '081277889900',
             'alamat' => 'PMI UDD',

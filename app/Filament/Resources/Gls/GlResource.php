@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -47,7 +48,10 @@ class GlResource extends Resource
                     ->default(null),
                 TextInput::make('kode_transaksi')
                     ->default(null),
-                TextInput::make('id_coa')
+                Select::make('id_coa')
+                    ->label('COA')
+                    ->relationship('coa', 'account_name')
+                    ->searchable()
                     ->required(),
                 TextInput::make('id_program_kerja')
                     ->numeric()
@@ -124,7 +128,8 @@ class GlResource extends Resource
                     ->searchable(),
                 TextColumn::make('kode_transaksi')
                     ->searchable(),
-                TextColumn::make('id_coa')
+                TextColumn::make('coa.account_name')
+                    ->label('COA')
                     ->searchable(),
                 TextColumn::make('id_program_kerja')
                     ->numeric()

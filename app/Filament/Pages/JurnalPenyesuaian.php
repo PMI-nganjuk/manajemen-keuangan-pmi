@@ -84,7 +84,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                         // Relasi Sistem
                         Select::make('id_coa')
                             ->label('COA')
-                            ->relationship('coa', 'nama_akun')
+                            ->relationship('coa', 'account_name')
                             ->searchable()
                             ->required(),
 
@@ -146,7 +146,7 @@ class JurnalPenyesuaian extends Page implements HasForms, HasTable
                 TextColumn::make('referensi')
                     ->searchable(),
 
-                TextColumn::make('coa.nama_akun')
+                TextColumn::make('coa.account_name')
                     ->label('COA')
                     ->searchable(),
 

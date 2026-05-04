@@ -3,39 +3,43 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Coa;
+use App\Models\ChartOfAccounts;
 use Illuminate\Support\Facades\DB;
 
 class CoaSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('coa')->delete();
+        DB::table('chart_of_accounts')->delete();
 
-        Coa::insert([
+        ChartOfAccounts::insert([
             [
-                'id_coa' => '5-100',
-                'nama_akun' => 'Beban Operasional',
-                'pos_saldo' => 'Debit',
-                'pos_laporan' => 'Laporan Aktivitas',
+                'id' => '5-100',
+                'category_two' => 11,
+                'account_name' => 'Beban Operasional',
+                'entry_type' => 'D',
+                'report_type_id' => 2,
             ],
             [
-                'id_coa' => '5-200',
-                'nama_akun' => 'Beban Program',
-                'pos_saldo' => 'Debit',
-                'pos_laporan' => 'Laporan Aktivitas',
+                'id' => '5-200',
+                'category_two' => 12,
+                'account_name' => 'Beban Program',
+                'entry_type' => 'D',
+                'report_type_id' => 2,
             ],
             [
-                'id_coa' => '4-100',
-                'nama_akun' => 'Penerimaan Donasi',
-                'pos_saldo' => 'Kredit',
-                'pos_laporan' => 'Laporan Aktivitas',
+                'id' => '4-100',
+                'category_two' => 9,
+                'account_name' => 'Penerimaan Donasi',
+                'entry_type' => 'K',
+                'report_type_id' => 1,
             ],
             [
-                'id_coa' => '1-100',
-                'nama_akun' => 'Kas UDD',
-                'pos_saldo' => 'Debit',
-                'pos_laporan' => 'Neraca',
+                'id' => '1-100',
+                'category_two' => 1,
+                'account_name' => 'Kas UDD',
+                'entry_type' => 'D',
+                'report_type_id' => 2,
             ],
         ]);
     }

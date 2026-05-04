@@ -47,10 +47,10 @@ class TransaksiKasPage extends Page implements HasTable
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('User')
+                    ->label('Pengguna')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('coa.nama_akun')
+                Tables\Columns\TextColumn::make('coa.account_name')
                     ->label('COA')
                     ->searchable(),
 

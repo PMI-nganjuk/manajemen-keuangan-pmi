@@ -69,14 +69,14 @@ class PenerimaanKas extends Page implements HasForms, HasTable
                             ->nullable(),
 
                         Select::make('id_user')
-                            ->label('User')
+                            ->label('Pengguna')
                             ->relationship('user', 'name')
                             ->searchable()
                             ->required(),
 
                         Select::make('id_coa')
                             ->label('COA')
-                            ->relationship('coa', 'nama_akun')
+                            ->relationship('coa', 'account_name')
                             ->searchable()
                             ->required(),
 
@@ -102,7 +102,7 @@ class PenerimaanKas extends Page implements HasForms, HasTable
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             PenerimaanKasModel::create($this->formData);
-            
+
             \Illuminate\Support\Facades\DB::commit();
 
             $this->reset('formData');
@@ -135,7 +135,7 @@ class PenerimaanKas extends Page implements HasForms, HasTable
 
                 TextColumn::make('referensi')->searchable(),
 
-                TextColumn::make('coa.nama_akun')
+                TextColumn::make('coa.account_name')
                     ->label('COA')
                     ->searchable(),
 
