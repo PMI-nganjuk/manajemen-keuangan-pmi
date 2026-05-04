@@ -23,11 +23,12 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles
         $data = [];
         foreach ($this->laporan as $row) {
             $data[] = [
-                $row->nama_coa ?? '-',
-                $row->saldo_awal ? number_format($row->saldo_awal, 2, ',', '.') : '0,00',
-                $row->penerimaan ? number_format($row->penerimaan, 2, ',', '.') : '0,00',
-                $row->pengeluaran ? number_format($row->pengeluaran, 2, ',', '.') : '0,00',
-                $row->saldo_akhir ? number_format($row->saldo_akhir, 2, ',', '.') : '0,00',
+                $row->periode ?? '-',
+                $row->tahun ?? '-',
+                ucfirst($row->status ?? '-'),
+                $row->kas_tahun1 ? number_format($row->kas_tahun1, 0, ',', '.') : '0',
+                $row->kas_tahun2 ? number_format($row->kas_tahun2, 0, ',', '.') : '0',
+                $row->saldo_akhir ? number_format($row->saldo_akhir, 0, ',', '.') : '0',
             ];
         }
 
@@ -38,13 +39,13 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles
     {
         return [
             ['Laporan Keuangan Tahun ' . $this->tahun],
-            ['Uraian', 'Saldo Awal', 'Penerimaan', 'Pengeluaran', 'Saldo Akhir']
+            ['Periode', 'Tahun', 'Status', 'Kas Tahun 1', 'Kas Tahun 2', 'Saldo Akhir']
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A1:F1');
         return [
             1    => ['font' => ['bold' => true, 'size' => 14]],
             2    => ['font' => ['bold' => true]],
