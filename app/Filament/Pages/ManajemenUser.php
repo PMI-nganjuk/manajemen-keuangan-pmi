@@ -24,6 +24,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Support\Icons\Heroicon;
 use App\Models\User;
+use App\Enums\RoleEnum;
+use App\Enums\KategoriEnum;
 use BackedEnum;
 use UnitEnum;
 
@@ -52,32 +54,22 @@ class ManajemenUser extends Page implements HasForms, HasTable
                 Grid::make(2)
                     ->schema([
                         Select::make('kategori')
-                    ->options([
-            'karyawan' => 'Karyawan',
-            'donatur' => 'Donatur',
-            'kreditur' => 'Kreditur',
-            'debitur' => 'Debitur',
-        ])
-                    ->default(null),
-                TextInput::make('nama')
-                    ->default(null),
-                TextInput::make('nomer_wa')
-                    ->default(null),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required(),
-                TextInput::make('alamat')
-                    ->default(null),
-                Select::make('role')
-                    ->options([
-            'admin' => 'Admin',
-            'manager_keuangan' => 'Manager keuangan',
-            'staf_keuangan' => 'Staf keuangan',
-            'pegawai' => 'Pegawai',
-        ])
-                    ->default('pegawai')
-                    ->required(),
+                            ->options(KategoriEnum::labels())
+                            ->default(null),
+                        TextInput::make('nama')
+                            ->default(null),
+                        TextInput::make('nomer_wa')
+                            ->default(null),
+                        TextInput::make('email')
+                            ->label('Email address')
+                            ->email()
+                            ->required(),
+                        TextInput::make('alamat')
+                            ->default(null),
+                        Select::make('role')
+                            ->options(RoleEnum::class)
+                            ->default(RoleEnum::STAFF)
+                            ->required(),
                 TextInput::make('password')
                     ->password()
                     ->required(),
@@ -139,8 +131,37 @@ class ManajemenUser extends Page implements HasForms, HasTable
                 //
             ])
             ->recordActions([
-                EditAction::make()->color('warning'),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->color('warning')
+                    ->modalHeading('Edit Pegawai')
+                    ->successNotificationTitle('Data pegawai berhasil diperbarui')
+                    ->form([
+                        Grid::make(2)
+                            ->schema([
+                                Select::make('kategori')
+                                    ->options(KategoriEnum::labels()),
+                                TextInput::make('nama'),
+                                TextInput::make('nomer_wa'),
+                                TextInput::make('email')
+                                    ->label('Email address')
+                                    ->email()
+                                    ->required(),
+                                TextInput::make('alamat'),
+                                Select::make('role')
+                                    ->options(RoleEnum::class)
+                                    ->required(),
+                                TextInput::make('password')
+                                    ->password()
+                                    ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null)
+                                    ->dehydrated(fn ($state) => filled($state))
+                                    ->helperText('Kosongkan jika tidak ingin mengubah password'),
+                            ])
+                            ->columns(2),
+                    ]),
+                DeleteAction::make()
+                    ->modalHeading('Hapus Pegawai')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus data pegawai ini? Data yang dihapus tidak dapat dikembalikan.')
+                    ->successNotificationTitle('Data pegawai berhasil dihapus'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
