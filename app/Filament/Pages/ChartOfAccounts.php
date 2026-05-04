@@ -172,7 +172,7 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
             ->value('id');
 
         if ($lastCoa) {
-            $mainPart  = explode(' - ', $lastCoa->id)[0] ?? '';
+            $mainPart = explode(' - ', $lastCoa)[0] ?? '';
             $sequence      = (int) substr($mainPart, strlen($prefix));
             $nextSequence  = str_pad($sequence + 1, 3, '0', STR_PAD_LEFT);
         } else {
