@@ -36,7 +36,7 @@ class PenerimaanKas extends Model
     // n - 1 CoA
     public function coa()
     {
-        return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
+        return $this->belongsTo(ChartOfAccounts::class, 'id_coa', 'id');
     }
 
     // n - 1 Program Kerja
@@ -54,7 +54,7 @@ class PenerimaanKas extends Model
     // 1 - n GL
     public function gl()
     {
-        return $this->hasMany(Gl::class, 'id_penerimaan_kas', 'id_penerimaan_kas');
+        return $this->hasMany(Gl::class, 'id_penerimaan_kas', 'id_pemasukan');
     }
 
 }

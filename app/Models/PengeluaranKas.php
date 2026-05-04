@@ -36,7 +36,7 @@ class PengeluaranKas extends Model
     // n - 1 CoA
     public function coa()
     {
-        return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
+        return $this->belongsTo(ChartOfAccounts::class, 'id_coa', 'id');
     }
 
     // n - 1 Program Kerja
@@ -54,7 +54,7 @@ class PengeluaranKas extends Model
     // 1 - n GL
     public function gl()
     {
-        return $this->hasMany(Gl::class, 'id_pengeluaran_kas', 'id_pengeluaran_kas');
+        return $this->hasMany(Gl::class, 'id_pengeluaran_kas', 'id_pengeluaran');
     }
 
 }

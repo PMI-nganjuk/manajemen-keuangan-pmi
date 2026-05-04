@@ -59,7 +59,7 @@ class Gl extends Model
     // Relasi 1 -> N (Inverse)
     public function coa()
     {
-        return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
+        return $this->belongsTo(ChartOfAccounts::class, 'id_coa', 'id');
     }
 
     // Relasi 1 -> N (Inverse)
@@ -79,7 +79,7 @@ class Gl extends Model
     // Relasi Sumber Transaksi (Inverse)
     public function penerimaanKas()
     {
-        return $this->belongsTo(PenerimaanKas::class, 'id_penerimaan_kas', 'id_penerimaan_kas');
+        return $this->belongsTo(PenerimaanKas::class, 'id_penerimaan_kas', 'id_pemasukan');
     }
 
 
@@ -87,7 +87,7 @@ class Gl extends Model
     // Relasi 1 -> N (Inverse)
     public function pengeluaranKas()
     {
-        return $this->belongsTo(PengeluaranKas::class, 'id_pengeluaran_kas', 'id_pengeluaran_kas');
+        return $this->belongsTo(PengeluaranKas::class, 'id_pengeluaran_kas', 'id_pengeluaran');
     }
 
     // Relasi 1 -> N (Inverse)

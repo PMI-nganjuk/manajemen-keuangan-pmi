@@ -44,7 +44,7 @@ class Penyesuaian extends Model
     // n - 1 Coa
     public function coa()
     {
-        return $this->belongsTo(Coa::class, 'id_coa', 'id_coa');
+        return $this->belongsTo(ChartOfAccounts::class, 'id_coa', 'id');
     }
 
     // 1 - n GL
