@@ -27,6 +27,10 @@ class User extends Authenticatable
     public $incrementing = true;
     protected $keyType = 'int';
 
+    protected $casts = [
+        'role' => RoleEnum::class,
+    ];
+
     protected $fillable = [
         'nama',
         'email',
@@ -60,10 +64,10 @@ class User extends Authenticatable
         return KategoriEnum::values();
     }
 
-    // Cek apakah user memiliki role tertentu.
-    public function hasRole(string $role): bool
+    // // Cek apakah user memiliki role tertentu.
+    public function hasRole(RoleEnum $role): bool
     {
-        return $this->role === $role;
+        return $this->role === $role; 
     }
 
     // Hash password otomatis ketika diset.
