@@ -15,14 +15,12 @@ return new class extends Migration
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id('id_user');
-                // enum dibuat menjadi class
                 $table->enum('kategori', ['karyawan', 'donatur', 'kreditur', 'debitur'])->nullable();
-                $table->enum('kategori', ['admin', 'manager_keuangan', 'staf_keuangan', ['pegawai']])->nullable();
                 $table->string('nama')->nullable();
                 $table->string('nomer_wa')->nullable();
                 $table->string('email')->unique();
                 $table->string('alamat')->nullable();
-                $table->enum('role', ['admin', 'user'])->default('user');
+                $table->enum('role', ['admin', 'manager_keuangan', 'staf_keuangan', 'pegawai'])->default('pegawai');
                 $table->string('password')->nullable();
                 $table->rememberToken();
                 $table->timestamps();
