@@ -2,7 +2,7 @@
 
 namespace App\Imports\Sheets;
 
-use App\Models\ProfilPmi;
+use App\Models\OrganizationProfile;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -13,7 +13,7 @@ class ProfileImport implements OnEachRow, WithHeadingRow
     {
         $r = $row->toArray();
 
-        $profil = ProfilPmi::first();
+        $profil = OrganizationProfile::first();
 
         $data = [
             'nama_pmi' => $r['nama_pmi'] ?? $r['nama_lembaga'] ?? null,
@@ -31,7 +31,7 @@ class ProfileImport implements OnEachRow, WithHeadingRow
         if ($profil) {
             $profil->update($data);
         } else {
-            ProfilPmi::create($data);
+            OrganizationProfile::create($data);
         }
     }
 }
