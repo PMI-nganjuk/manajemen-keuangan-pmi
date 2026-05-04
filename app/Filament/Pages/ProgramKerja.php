@@ -10,7 +10,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Tables;
-use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
@@ -63,7 +62,7 @@ class ProgramKerja extends Page implements HasForms, HasTable
                         Textarea::make('keterangan')->rows(3),
                     ])
                     ->columns(2),
-            ])     
+            ])
         ->statePath('data');
     }
 
@@ -118,8 +117,29 @@ class ProgramKerja extends Page implements HasForms, HasTable
                 //
             ])
             ->recordActions([
-                EditAction::make()->color('warning'),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->color('warning')
+                    ->modalHeading('Edit Program Kerja')
+                    ->successNotificationTitle('Data berhasil diperbarui')
+                    ->form([
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('nama_program')
+                                    ->required(),
+                                Select::make('id_pegawai')
+                                    ->label('Nama PIC')
+                                    ->options(User::query()->pluck('nama', 'id_user'))
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
+                                Textarea::make('keterangan')->rows(3),
+                            ])
+                            ->columns(2),
+                    ]),
+                DeleteAction::make()
+                    ->modalHeading('Hapus Program Kerja')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus data ini? Data yang dihapus tidak dapat dikembalikan.')
+                    ->successNotificationTitle('Data berhasil dihapus'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
