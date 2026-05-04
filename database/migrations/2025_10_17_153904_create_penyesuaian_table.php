@@ -26,7 +26,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_laporan')->nullable();
 
             // Relations
-            $table->foreign('id_coa')->references('id_coa')->on('coa')->onDelete('cascade');
+            $table->foreign('id_coa')
+                ->references('id')
+                ->on('chart_of_accounts')
+                ->onDelete('cascade');
             $table->foreign('id_program_kerja')->references('id_program_kerja')->on('program_kerja')->onDelete('cascade');
             $table->foreign('id_laporan')->references('id_laporan')->on('laporan_keuangan')->onDelete('cascade');
 

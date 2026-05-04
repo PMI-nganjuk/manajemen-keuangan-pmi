@@ -50,7 +50,10 @@ return new class extends Migration {
             $table->timestamps();
 
             // FOREIGN KEY
-            $table->foreign('id_coa')->references('id_coa')->on('coa')->cascadeOnDelete();
+            $table->foreign('id_coa')
+                  ->references('id')
+                  ->on('chart_of_accounts')
+                  ->cascadeOnDelete();
             $table->foreign('id_program_kerja')->references('id_program_kerja')->on('program_kerja')->nullOnDelete();
             $table->foreign('id_laporan')->references('id_laporan')->on('laporan_keuangan')->nullOnDelete();
 
