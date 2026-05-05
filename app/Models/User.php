@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\RoleEnum;
+use App\Enums\KategoriEnum;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,12 +11,25 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
+
+    // Role
+    public const ROLE_ADMIN            = 'admin';
+    public const ROLE_MANAGER_KEUANGAN = 'manager_keuangan';
+    public const ROLE_STAF_KEUANGAN    = 'staf_keuangan';
+
+    // Kategori
+    public const KATEGORI_KARYAWAN = 'karyawan';
+
     use HasFactory, Notifiable;
 
     protected $table = 'users';
     protected $primaryKey = 'id_user';
     public $incrementing = true;
     protected $keyType = 'int';
+
+    protected $casts = [
+        'role' => RoleEnum::class,
+    ];
 
     protected $fillable = [
         'nama',
@@ -31,41 +46,31 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Role
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_MANAGER_KEUANGAN = 'manager_keuangan';
-    public const ROLE_STAF_KEUANGAN = 'staf_keuangan';
-    public const ROLE_PEGAWAI = 'pegawai';
+    // Accessor untuk name di Laravel default.
+    public function getNameAttribute()
+    {
+        return $this->nama ?? 'User';
+    }
 
-    // Kategori
-    public const KATEGORI_KARYAWAN = 'karyawan';
-    public const KATEGORI_DONATUR = 'donatur';
-    public const KATEGORI_KREDITUR = 'kreditur';
-    public const KATEGORI_DEBITUR = 'debitur';
-
-    // Untuk mengambil semua list role
+    // Mengambil seluruh nilai role (untuk validasi / select Filament).
     public static function getRoles(): array
     {
-        return [
-            self::ROLE_ADMIN,
-            self::ROLE_MANAGER_KEUANGAN,
-            self::ROLE_STAF_KEUANGAN,
-            self::ROLE_PEGAWAI,
-        ];
+        return RoleEnum::values();
     }
 
-    // Untuk mengambil semua list kategori
+    // Mengambil seluruh kategori (untuk validasi / select Filament).
     public static function getKategori(): array
     {
-        return [
-            self::KATEGORI_KARYAWAN,
-            self::KATEGORI_DONATUR,
-            self::KATEGORI_KREDITUR,
-            self::KATEGORI_DEBITUR,
-        ];
+        return KategoriEnum::values();
     }
 
-   // encrypt password saat diset
+    // // Cek apakah user memiliki role tertentu.
+    public function hasRole(RoleEnum $role): bool
+    {
+        return $this->role === $role; 
+    }
+
+    // Hash password otomatis ketika diset.
     public function setPasswordAttribute($value)
     {
         if (!empty($value)) {
@@ -75,20 +80,19 @@ class User extends Authenticatable
         }
     }
 
-
-    // 1 - n program kerja
+    // Relasi 1 - N ke Program Kerja
     public function programKerja()
     {
         return $this->hasMany(ProgramKerja::class, 'id_pegawai', 'id_user');
     }
 
-    // 1 - n penerimaan kas
+    // Relasi 1 - N ke Penerimaan Kas
     public function penerimaanKas()
     {
         return $this->hasMany(PenerimaanKas::class, 'id_user', 'id_user');
     }
 
-    // 1 - n pengeluaran kas
+    // Relasi 1 - N ke Pengeluaran Kas
     public function pengeluaranKas()
     {
         return $this->hasMany(PengeluaranKas::class, 'id_user', 'id_user');

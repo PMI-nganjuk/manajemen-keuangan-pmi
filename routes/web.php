@@ -2,7 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Halaman depan / landing page
-Route::get('/', function () {
-    return view('welcome');
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
+
+Route::get('/', fn () => redirect('/admin'));
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/export/laporan-keuangan', [ExportController::class, 'laporanKeuangan']);
+    Route::post('/laporan/import', [ImportController::class, 'import'])
+        ->name('laporan.import');
 });

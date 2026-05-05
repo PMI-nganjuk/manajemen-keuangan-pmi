@@ -43,4 +43,11 @@ class ProgramKerja extends Model
     {
         return $this->hasMany(Penyesuaian::class, 'id_program_kerja', 'id_program_kerja');
     }
+
+    // 1 - n GL
+    public function gl()
+    {
+        return $this->hasMany(Gl::class, 'id_program_kerja', 'id_program_kerja');
+    }
+
 }
