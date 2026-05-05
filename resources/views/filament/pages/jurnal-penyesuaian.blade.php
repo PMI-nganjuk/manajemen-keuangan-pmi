@@ -10,7 +10,7 @@
 
         {{ $this->form }}
 
-        <div class="mt-4 flex gap-2">
+        <div class="flex gap-2" style="margin-top: 1rem;">
             <x-filament::button wire:click="createRecord" color="primary">
                 @if ($this->editingId)
                     Perbarui Data
