@@ -39,7 +39,10 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
     public function headings(): array
     {
         return [
-            ['Laporan Keuangan Tahun ' . $this->tahun],
+            ['PALANG MERAH INDONESIA KABUPATEN NGANJUK'],
+            ['Laporan Keuangan'],
+            ['Periode 01 Januari ' . $this->tahun . ' sampai dengan 31 Desember ' . $this->tahun],
+            [''],
             ['Periode', 'Tahun', 'Status', 'Kas Tahun 1', 'Kas Tahun 2', 'Saldo Akhir']
         ];
     }
@@ -47,9 +50,46 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
     public function styles(Worksheet $sheet)
     {
         $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+
         return [
-            1    => ['font' => ['bold' => true, 'size' => 14]],
-            2    => ['font' => ['bold' => true]],
+            'A1:F3' => [
+                'font' => [
+                    'color' => ['argb' => 'FFFFFFFF'],
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['argb' => 'FF3B62A4'],
+                ],
+            ],
+            // Styling khusus baris 1 agar lebih tebal
+            'A1:F1' => [
+                'font' => [
+                    'bold' => true,
+                    'size' => 12,
+                    'color' => ['argb' => 'FFFFFFFF'],
+                ],
+            ],
+            // Styling kotak tabel kolom (baris 5)
+            'A5:F5' => [
+                'font' => [
+                    'bold' => true,
+                    'color' => ['argb' => 'FFFFFFFF'],
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['argb' => 'FF3B62A4'],
+                ],
+            ],
         ];
     }
 }
