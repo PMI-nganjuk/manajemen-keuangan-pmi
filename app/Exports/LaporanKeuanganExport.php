@@ -29,6 +29,8 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
                 ucfirst($row->status ?? '-'),
                 number_format((float) ($row->kas_tahun1 ?? 0), 0, ',', '.'),
                 number_format((float) ($row->kas_tahun2 ?? 0), 0, ',', '.'),
+                number_format((float) ($row->total_pemasukan ?? 0), 0, ',', '.'),
+                number_format((float) ($row->total_pengeluaran ?? 0), 0, ',', '.'),
                 number_format((float) ($row->saldo_akhir ?? 0), 0, ',', '.'),
             ];
         }
@@ -43,18 +45,18 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
             ['Laporan Keuangan'],
             ['Periode 01 Januari ' . $this->tahun . ' sampai dengan 31 Desember ' . $this->tahun],
             [''],
-            ['Periode', 'Tahun', 'Status', 'Kas Tahun 1', 'Kas Tahun 2', 'Saldo Akhir']
+            ['Periode', 'Tahun', 'Status', 'Kas Tahun 1', 'Kas Tahun 2', 'Pemasukan', 'Pengeluaran', 'Saldo Akhir']
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->mergeCells('A1:F1');
-        $sheet->mergeCells('A2:F2');
-        $sheet->mergeCells('A3:F3');
+        $sheet->mergeCells('A1:H1');
+        $sheet->mergeCells('A2:H2');
+        $sheet->mergeCells('A3:H3');
 
         return [
-            'A1:F3' => [
+            'A1:H3' => [
                 'font' => [
                     'color' => ['argb' => 'FFFFFFFF'],
                 ],
@@ -68,7 +70,7 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
                 ],
             ],
             // Styling khusus baris 1 agar lebih tebal
-            'A1:F1' => [
+            'A1:H1' => [
                 'font' => [
                     'bold' => true,
                     'size' => 12,
@@ -76,7 +78,7 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, Shou
                 ],
             ],
             // Styling kotak tabel kolom (baris 5)
-            'A5:F5' => [
+            'A5:H5' => [
                 'font' => [
                     'bold' => true,
                     'color' => ['argb' => 'FFFFFFFF'],

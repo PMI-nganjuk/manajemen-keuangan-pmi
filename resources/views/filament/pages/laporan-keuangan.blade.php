@@ -72,6 +72,8 @@
                             <th style="text-align: left; padding: 10px; white-space: nowrap;">Status</th>
                             <th style="text-align: right; padding: 10px; white-space: nowrap;">Kas Tahun 1</th>
                             <th style="text-align: right; padding: 10px; white-space: nowrap;">Kas Tahun 2</th>
+                            <th style="text-align: right; padding: 10px; white-space: nowrap;">Pemasukan</th>
+                            <th style="text-align: right; padding: 10px; white-space: nowrap;">Pengeluaran</th>
                             <th style="text-align: right; padding: 10px; white-space: nowrap;">Saldo Akhir</th>
                         </tr>
                     </thead>
@@ -80,10 +82,10 @@
                             @php
                                 $status = strtolower((string) ($row->status ?? '-'));
                                 $statusColor = match ($status) {
-                                    'final', 'selesai' => '#15803d',
-                                    'draft' => '#b45309',
-                                    default => '#6b7280',
-                                };
+                                     'final', 'selesai' => '#15803d',
+                                     'draft' => '#b45309',
+                                     default => '#6b7280',
+                                 };
                             @endphp
                             <tr style="border-bottom: 1px solid #f1f5f9;">
                                 <td style="padding: 10px;">{{ $row->periode ?? '-' }}</td>
@@ -97,13 +99,19 @@
                                 <td style="padding: 10px; text-align: right;">
                                     {{ number_format((float) ($row->kas_tahun2 ?? 0), 0, ',', '.') }}
                                 </td>
+                                <td style="padding: 10px; text-align: right;">
+                                    {{ number_format((float) ($row->total_pemasukan ?? 0), 0, ',', '.') }}
+                                </td>
+                                <td style="padding: 10px; text-align: right;">
+                                    {{ number_format((float) ($row->total_pengeluaran ?? 0), 0, ',', '.') }}
+                                </td>
                                 <td style="padding: 10px; text-align: right; font-weight: 700;">
                                     {{ number_format((float) ($row->saldo_akhir ?? 0), 0, ',', '.') }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" style="padding: 20px; text-align: center; color: #6b7280;">
+                                <td colspan="10" style="padding: 20px; text-align: center; color: #6b7280;">
                                     Tidak ada data laporan keuangan untuk tahun ini.
                                 </td>
                             </tr>

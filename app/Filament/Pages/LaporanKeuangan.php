@@ -42,7 +42,28 @@ class LaporanKeuangan extends Page implements HasForms
             return;
         }
 
-        $query = DB::table('laporan_keuangan');
+        $query = DB::table('laporan_keuangan')
+            ->select('laporan_keuangan.*');
+
+        if (SchemaFacade::hasTable('penerimaan_kas')) {
+            $query->addSelect(DB::raw('(
+                SELECT COALESCE(SUM(pk.rupiah), 0)
+                FROM penerimaan_kas pk
+                WHERE pk.id_laporan = laporan_keuangan.id_laporan
+            ) as total_pemasukan'));
+        } else {
+            $query->addSelect(DB::raw('0 as total_pemasukan'));
+        }
+
+        if (SchemaFacade::hasTable('pengeluaran_kas')) {
+            $query->addSelect(DB::raw('(
+                SELECT COALESCE(SUM(pg.rupiah), 0)
+                FROM pengeluaran_kas pg
+                WHERE pg.id_laporan = laporan_keuangan.id_laporan
+            ) as total_pengeluaran'));
+        } else {
+            $query->addSelect(DB::raw('0 as total_pengeluaran'));
+        }
 
         if (SchemaFacade::hasColumn('laporan_keuangan', 'tahun') && $this->tahun !== null) {
             $query->where('tahun', $this->tahun);
