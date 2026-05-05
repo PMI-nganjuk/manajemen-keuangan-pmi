@@ -11,10 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Drop the old tables
-        Schema::dropIfExists('gl');
-        Schema::dropIfExists('penerimaan_kas');
-        Schema::dropIfExists('pengeluaran_kas');
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
