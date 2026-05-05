@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\CategoryOne;
 use App\Models\CategoryTwo;
 use App\Models\ChartOfAccounts as ChartOfAccountsModel;
+use App\Models\ReportTypes;
 use App\Enums\EntryTypeEnum;
 use App\Enums\RoleEnum;
 use BackedEnum;
@@ -47,6 +48,7 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
     protected static UnitEnum|string|null $navigationGroup = 'Keuangan';
 
     public array $formData = [];
+    public ?string $editId = null;
 
     public function mount(): void
     {
@@ -60,10 +62,8 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
                 ->schema([
                     Select::make('category_one')
                         ->label('Kategori 1')
-                        ->relationship('categoryOne', 'category_name')
+                        ->options(CategoryOne::pluck('category_name', 'category_code'))
                         ->searchable()
-                        ->preload()
-                        ->optionsLimit(10)
                         ->placeholder('Pilih Kategori 1')
                         ->dehydrated(false)
                         ->createOptionForm([
@@ -71,6 +71,10 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
                                 ->label('Nama Kategori 1')
                                 ->required(),
                         ])
+                        ->createOptionUsing(function (array $data) {
+                            $category = CategoryOne::create($data);
+                            return $category->category_code;
+                        })
                         ->live(onBlur: true)
                         ->afterStateUpdated(function (Set $set, Get $get) {
                             $set('category_two', null);
@@ -80,15 +84,8 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
 
                     Select::make('category_two')
                         ->label('Kategori 2')
-                        ->relationship(
-                            name: 'categoryTwo',
-                            titleAttribute: 'category_name',
-                            modifyQueryUsing: fn (Builder $query, Get $get) =>
-                                $query->where('category_one', $get('category_one'))
-                        )
+                        ->options(fn (Get $get) => CategoryTwo::where('category_one', $get('category_one'))->pluck('category_name', 'category_code'))
                         ->searchable()
-                        ->preload()
-                        ->optionsLimit(10)
                         ->placeholder('Pilih Kategori 2 (pilih Kategori 1 dulu)')
                         ->disabled(fn (Get $get): bool => blank($get('category_one')))
                         ->createOptionForm([
@@ -96,13 +93,11 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
                                 ->label('Nama Kategori 2')
                                 ->required(),
                         ])
-                        ->createOptionAction(
-                            fn (Action $action) => $action
-                                ->mutateFormDataUsing(function (array $data, Get $get): array {
-                                    $data['category_one'] = $get('category_one');
-                                    return $data;
-                                })
-                        )
+                        ->createOptionUsing(function (array $data, Get $get) {
+                            $data['category_one'] = $get('category_one');
+                            $category = CategoryTwo::create($data);
+                            return $category->category_code;
+                        })
                         ->live(onBlur: true)
                         ->afterStateUpdated(fn (Set $set, Get $get) =>
                             self::generateSuggestedKode($set, $get)
@@ -130,14 +125,17 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
 
                     Select::make('report_type_id')
                         ->label('Pos Laporan')
-                        ->relationship('reportType', 'report_name')
+                        ->options(ReportTypes::pluck('report_name', 'id'))
                         ->searchable()
-                        ->preload()
                         ->createOptionForm([
                             TextInput::make('report_name')
                                 ->label('Pos Laporan')
                                 ->required(),
                         ])
+                        ->createOptionUsing(function (array $data) {
+                            $report = ReportTypes::create($data);
+                            return $report->id;
+                        })
                         ->required()
                         ->native(false),
                 ])
@@ -182,27 +180,37 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
         $set('id', $prefix . $nextSequence . ' - 00');
     }
 
-    public function create(): void
+    public function save(): void
     {
         $data = $this->form->getState();
 
         DB::beginTransaction();
 
         try {
-            ChartOfAccountsModel::create($data);
+            if ($this->editId) {
+                $record = ChartOfAccountsModel::findOrFail($this->editId);
+                unset($data['category_one']);
+                $record->update($data);
+                $message = 'COA berhasil diperbarui!';
+            } else {
+                ChartOfAccountsModel::create($data);
+                $message = 'COA berhasil ditambahkan!';
+            }
+            
             DB::commit();
 
+            $this->editId = null;
             $this->reset('formData');
             $this->form->fill();
 
             Notification::make()
-                ->title('COA berhasil ditambahkan!')
+                ->title($message)
                 ->success()
                 ->send();
 
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('COA Create Error: ' . $e->getMessage(), [
+            Log::error('COA Save Error: ' . $e->getMessage(), [
                 'data'  => $data,
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -213,6 +221,13 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
                 ->danger()
                 ->send();
         }
+    }
+
+    public function cancelEdit(): void
+    {
+        $this->editId = null;
+        $this->reset('formData');
+        $this->form->fill();
     }
 
     public function table(Table $table): Table
@@ -270,19 +285,18 @@ class ChartOfAccounts extends Page implements HasForms, HasTable
             ->striped()
             ->defaultSort('id', 'asc')
             ->recordActions([
-                EditAction::make()
-                    ->hidden($isStaff)
+                Action::make('edit')
+                    ->label('Edit')
+                    ->icon('heroicon-m-pencil-square')
                     ->color('warning')
-                    ->form($this->getFormSchema())
-                    ->mutateRecordDataUsing(function (array $data, $record): array {
+                    ->hidden($isStaff)
+                    ->action(function (ChartOfAccountsModel $record) {
+                        $this->editId = $record->id;
+                        $data = $record->attributesToArray();
                         $data['category_one'] = substr($record->id, 0, 1);
-                        return $data;
-                    })
-                    ->using(function (Model $record, array $data): Model {
-                        unset($data['category_one']);
-                        $record->offsetUnset('category_one');
-                        $record->update($data);
-                        return $record;
+                        $this->form->fill($data);
+                        
+                        $this->dispatch('scroll-to-top');
                     }),
 
                 DeleteAction::make()

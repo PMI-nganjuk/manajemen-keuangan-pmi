@@ -23,6 +23,6 @@ class CategoryTwo extends Model
 
     public function categoryOne()
     {
-        return $this->belongsTo(CategoryOne::class, 'category_code', 'category_code');
+        return $this->belongsTo(CategoryOne::class, 'category_one', 'category_code');
     }
 }
