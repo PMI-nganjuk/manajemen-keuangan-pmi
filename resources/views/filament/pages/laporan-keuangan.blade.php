@@ -7,37 +7,31 @@
     @endphp
 
     <div style="display: grid; gap: 16px;">
-        <form wire:submit.prevent="downloadPdf">
-            <x-filament::section>
-                <x-slot name="heading">Laporan Keuangan Tahunan</x-slot>
+        <x-filament::section>
+            <x-slot name="heading">Laporan Keuangan Tahunan</x-slot>
 
-                <p style="margin: 0 0 12px 0; color: #6b7280; font-size: 14px;">
-                    Pilih tahun, lihat ringkasan data, lalu unduh laporan PDF.
-                </p>
+            <p style="margin: 0 0 12px 0; color: #6b7280; font-size: 14px;">
+                Pilih tahun, lihat ringkasan data, lalu export excel.
+            </p>
 
-                <div style="max-width: 420px;">
-                    {{ $this->form }}
-                </div>
+            <div style="max-width: 420px;">
+                {{ $this->form }}
+            </div>
 
-                <x-slot name="footer">
-                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                        <x-filament::button type="submit" icon="heroicon-o-arrow-down-tray">
-                            Download PDF
+            <x-slot name="footer">
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <a href="/export/laporan-keuangan?tahun={{ $tahun ?? date('Y') }}" target="_blank">
+                        <x-filament::button type="button" color="success" icon="heroicon-o-table-cells">
+                            Export Excel
                         </x-filament::button>
+                    </a>
 
-                        <a href="/export/laporan-keuangan" target="_blank">
-                            <x-filament::button type="button" color="success" icon="heroicon-o-table-cells">
-                                Export Excel
-                            </x-filament::button>
-                        </a>
-
-                        <span style="font-size: 13px; color: #6b7280;">
-                            Tahun aktif: {{ $tahun ?? '-' }}
-                        </span>
-                    </div>
-                </x-slot>
-            </x-filament::section>
-        </form>
+                    <span style="font-size: 13px; color: #6b7280;">
+                        Tahun aktif: {{ $tahun ?? '-' }}
+                    </span>
+                </div>
+            </x-slot>
+        </x-filament::section>
 
         <x-filament::section>
             <x-slot name="heading">Ringkasan</x-slot>

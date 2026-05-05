@@ -5,9 +5,10 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles
+class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSize
 {
     protected $tahun;
     protected $laporan;
@@ -26,9 +27,9 @@ class LaporanKeuanganExport implements FromArray, WithHeadings, WithStyles
                 $row->periode ?? '-',
                 $row->tahun ?? '-',
                 ucfirst($row->status ?? '-'),
-                $row->kas_tahun1 ? number_format($row->kas_tahun1, 0, ',', '.') : '0',
-                $row->kas_tahun2 ? number_format($row->kas_tahun2, 0, ',', '.') : '0',
-                $row->saldo_akhir ? number_format($row->saldo_akhir, 0, ',', '.') : '0',
+                number_format((float) ($row->kas_tahun1 ?? 0), 0, ',', '.'),
+                number_format((float) ($row->kas_tahun2 ?? 0), 0, ',', '.'),
+                number_format((float) ($row->saldo_akhir ?? 0), 0, ',', '.'),
             ];
         }
 

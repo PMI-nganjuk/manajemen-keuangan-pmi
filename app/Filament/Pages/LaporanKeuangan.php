@@ -51,13 +51,6 @@ class LaporanKeuangan extends Page implements HasForms
         $this->laporan = $query->get()->toArray();
     }
 
-    public function downloadPdf()
-    {
-        return redirect()->route('laporan-keuangan.pdf', [
-            'tahun' => $this->tahun,
-        ]);
-    }
-
     public function form(Schema $schema): Schema
     {
         return $schema
