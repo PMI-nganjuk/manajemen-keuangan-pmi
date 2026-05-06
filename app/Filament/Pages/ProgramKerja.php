@@ -55,7 +55,7 @@ class ProgramKerja extends Page implements HasForms, HasTable
                             ->required(),
                         Select::make('id_pegawai')
                             ->label('Nama PIC')
-                            ->options(User::query()->pluck('nama', 'id_user'))
+                            ->options(User::query()->pluck('nama', 'id_user')->map(fn($name) => $name ?? 'User'))
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -128,7 +128,7 @@ class ProgramKerja extends Page implements HasForms, HasTable
                                     ->required(),
                                 Select::make('id_pegawai')
                                     ->label('Nama PIC')
-                                    ->options(User::query()->pluck('nama', 'id_user'))
+                                    ->options(User::query()->pluck('nama', 'id_user')->map(fn($name) => $name ?? 'User'))
                                     ->searchable()
                                     ->preload()
                                     ->required(),

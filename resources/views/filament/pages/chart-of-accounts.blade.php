@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     @if(!auth()->user()->hasRole(\App\Enums\RoleEnum::STAFF))
-        <form wire:submit="create">
+        <form wire:submit="save">
             
             <x-filament::section>
                 <x-slot name="heading">
